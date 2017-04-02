@@ -18,10 +18,10 @@ public class Server {
 
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            Socket clientSocket;
+            
             while (true) {
-                clientSocket = serverSocket.accept();
                 // Create new thread for the client
+                new ClientThread(serverSocket.accept()).start();
             }
         }
         catch (IOException e) {

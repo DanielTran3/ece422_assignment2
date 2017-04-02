@@ -13,6 +13,9 @@ public class Client {
 
         try {
             Socket clientSocket = new Socket(hostname, port);
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInput()));
+            BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         }
 
         catch (IOException e) {

@@ -23,6 +23,7 @@ public class Client {
             int i = 0;
             while (i < 10) {
             	writeToServer.println("hi %i" + i);
+            	i++;
             }
             System.out.println(readFromServer.readLine());
         }

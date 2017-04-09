@@ -30,6 +30,7 @@ public class ClientThread extends Thread {
 	            BufferedReader readFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 	        	while (i < 10) {
 	        		System.out.println("Client: " + readFromClient.readLine());
+	        		i++;
 	        	}
 	            writeToClient.println("From Server");
 			} catch (IOException e) {

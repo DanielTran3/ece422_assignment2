@@ -31,6 +31,8 @@ public class ClientThread extends Thread {
 			String clientPassword = readFromClient.readLine();
 			if ((clientUsername == null) || (clientPassword == null)) {
 				System.out.println("Error Occurred in receiving credentials.");
+				System.out.println(clientUsername);
+				System.out.println(clientPassword);
 			}
 			else {
 				System.out.println(clientUsername);

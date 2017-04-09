@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 public class Client {
-    public void main (String args[]) {
+    public static void main (String args[]) {
 
         if (args.length != 2) {
 			System.out.println("Please Enter Only Two Inputs: Portnumber Hostname");

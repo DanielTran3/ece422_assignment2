@@ -22,22 +22,25 @@ public class ClientThread extends Thread {
 	}
 
 	public void run() {
-		int i = 0;
         System.out.println("Server Connected to Client!");
 		try {
 			PrintWriter writeToClient = new PrintWriter(this.clientSocket.getOutputStream(), true);
             BufferedReader readFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			String clientUsername = readFromClient.readLine();
-			String clientPassword = readFromClient.readLine();
-			if ((clientUsername == null) || (clientPassword == null)) {
-				System.out.println("Error Occurred in receiving credentials.");
-				System.out.println(clientUsername);
-				System.out.println(clientPassword);
+			String credentials;
+			while ((credentials = readFromClient.readLine()) != null) {
+				System.out.println(credentials);
 			}
-			else {
-				System.out.println(clientUsername);
-				System.out.println(clientPassword);
-			}
+//            String clientUsername = readFromClient.readLine();
+//			String clientPassword = readFromClient.readLine();
+//			if ((clientUsername == null) || (clientPassword == null)) {
+//				System.out.println("Error Occurred in receiving credentials.");
+//				System.out.println(clientUsername);
+//				System.out.println(clientPassword);
+//			}
+//			else {
+//				System.out.println(clientUsername);
+//				System.out.println(clientPassword);
+//			}
 			
 			readFromClient.close();
 			writeToClient.close();

@@ -7,19 +7,19 @@ import java.util.List;
 public class Server {
 	static String shadowFile = "shadow_file.txt";
 	static List<String> passwordList;
-	
-	
+
+
 	public static void main (String args[]) {
-        int port = Integer.parseInt(args[0]);
-       
         if (args.length != 1) {
 			System.out.println("Please Enter Only One Inputs: Portnumber");
 			System.exit(0);
 		}
+		int port = Integer.parseInt(args[0]);
+
 
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            System.out.println(InetAddress.getLocalHost().getHostName());
+            System.out.println("hostname: " + InetAddress.getLocalHost().getHostName());
             while (true) {
                 // Create new thread for the client
                 new ClientThread(serverSocket.accept()).start();

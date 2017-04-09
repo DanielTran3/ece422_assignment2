@@ -17,22 +17,20 @@ public class ClientThread extends Thread {
 
 	public ClientThread(Socket accept) {
 		this.clientSocket = accept;
-		
+
 	}
 
 	public void run() {
 		int i = 0;
         while (i < 10) {
             System.out.println("Server Connected to Client!");
-            PrintWriter writeToClient;
 			try {
-				writeToClient = new PrintWriter(this.clientSocket.getOutputStream(), true);
+				PrintWriter writeToClient = new PrintWriter(this.clientSocket.getOutputStream(), true);
 	            BufferedReader readFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-	        	while (i < 10) {
-	        		System.out.println("Client: " + readFromClient.readLine());
-	        		i++;
-	        	}
-	            writeToClient.println("From Server");
+				String clientUsername = readFromClient.readLine();
+				char[] clientPassword = readFromClient.readLine();
+				System.out.println(clientUsername);
+				System.out.println(clientPassword);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

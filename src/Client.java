@@ -33,12 +33,13 @@ public class Client {
 
             writeToServer.print(username); 
             writeToServer.print(password);
+			readFromServer.close();
+			writeToServer.close();
+			clientSocket.close();
         }
-
         catch (IOException e) {
             System.out.println("Failed to create socket.");
             e.printStackTrace();
         }
-
     }
 }

@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -22,19 +23,26 @@ public class ClientThread extends Thread {
 
 	public void run() {
 		int i = 0;
-        while (i < 10) {
-            System.out.println("Server Connected to Client!");
-			try {
-				PrintWriter writeToClient = new PrintWriter(this.clientSocket.getOutputStream(), true);
-	            BufferedReader readFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				String clientUsername = readFromClient.readLine();
-				String clientPassword = readFromClient.readLine();
+        System.out.println("Server Connected to Client!");
+		try {
+			PrintWriter writeToClient = new PrintWriter(this.clientSocket.getOutputStream(), true);
+            BufferedReader readFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			String clientUsername = readFromClient.readLine();
+			String clientPassword = readFromClient.readLine();
+			if ((clientUsername == null) || (clientPassword == null)) {
+				System.out.println("Error Occurred in receiving credentials.");
+			}
+			else {
 				System.out.println(clientUsername);
 				System.out.println(clientPassword);
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
-        }
+			
+			readFromClient.close();
+			writeToClient.close();
+			this.clientSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

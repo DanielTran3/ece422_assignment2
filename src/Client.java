@@ -29,7 +29,7 @@ public class Client {
     			System.exit(0);
     		}
     		String username = readInput.readLine("Enter your Username: ");
-    		char[] password = readInput.readPassword("Enter your Password: ");
+    		String password = readInput.readPassword("Enter your Password: ").toString();
 
             writeToServer.print(username); 
             writeToServer.print(password);

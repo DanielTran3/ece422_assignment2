@@ -28,7 +28,7 @@ public class ClientThread extends Thread {
 				PrintWriter writeToClient = new PrintWriter(this.clientSocket.getOutputStream(), true);
 	            BufferedReader readFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				String clientUsername = readFromClient.readLine();
-				char[] clientPassword = readFromClient.readLine();
+				String clientPassword = readFromClient.readLine();
 				System.out.println(clientUsername);
 				System.out.println(clientPassword);
 			} catch (IOException e) {

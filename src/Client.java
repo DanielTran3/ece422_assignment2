@@ -31,8 +31,8 @@ public class Client {
     		String username = readInput.readLine("Enter your Username: ");
     		String password = readInput.readLine("Enter your Password: ");
 
-            writeToServer.print(username); 
-            writeToServer.print(password);
+            writeToServer.println(username); 
+            writeToServer.println(password);
 			readFromServer.close();
 			writeToServer.close();
 			clientSocket.close();

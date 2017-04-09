@@ -30,17 +30,6 @@ public class ClientThread extends Thread {
 			while ((credentials = readFromClient.readLine()) != null) {
 				System.out.println(credentials);
 			}
-//            String clientUsername = readFromClient.readLine();
-//			String clientPassword = readFromClient.readLine();
-//			if ((clientUsername == null) || (clientPassword == null)) {
-//				System.out.println("Error Occurred in receiving credentials.");
-//				System.out.println(clientUsername);
-//				System.out.println(clientPassword);
-//			}
-//			else {
-//				System.out.println(clientUsername);
-//				System.out.println(clientPassword);
-//			}
 			
 			readFromClient.close();
 			writeToClient.close();
@@ -51,3 +40,15 @@ public class ClientThread extends Thread {
 	}
 
 }
+
+//String clientUsername = readFromClient.readLine();
+//String clientPassword = readFromClient.readLine();
+//if ((clientUsername == null) || (clientPassword == null)) {
+//	System.out.println("Error Occurred in receiving credentials.");
+//	System.out.println(clientUsername);
+//	System.out.println(clientPassword);
+//}
+//else {
+//	System.out.println(clientUsername);
+//	System.out.println(clientPassword);
+//}

@@ -5,6 +5,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 public class Client {
+	
+	private static KeyExchange clientKeys;
+	
     public static void main (String args[]) {
 
         if (args.length != 2) {
@@ -17,6 +20,8 @@ public class Client {
         Console readInput = System.console();
 
         try {
+        	TEA encryption = new TEA();
+        	TEA decryption = new TEA();
             System.out.println("Connecting to Computer: " + hostname + " On port: " + port);
             Socket clientSocket = new Socket(hostname, port);
             System.out.println("Connection Successful!");
@@ -33,6 +38,21 @@ public class Client {
 
             writeToServer.println(username); 
             writeToServer.println(password);
+            
+            //----------- After authentication is good, make, encrypt, and send keys
+            clientKeys = new KeyExchange();
+            clientKeys.generateKeys();
+            
+            // Encrypt the public key
+            // Pass: clientKeys.getPublicKey().getEncoded() into TEA encryption
+            //clientKeys.setEncryptedPublicKey();
+            // Send public key
+            writeToServer.println(clientKeys.getEncryptedPublicKey());
+            
+            // Receive server's encrypted public key
+            String str_encServerKey = readFromServer.readLine();
+            //clientKeys.setEncServerKey();
+            
 			readFromServer.close();
 			writeToServer.close();
 			clientSocket.close();

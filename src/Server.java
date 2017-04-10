@@ -22,7 +22,7 @@ public class Server {
             System.out.println("hostname: " + InetAddress.getLocalHost().getHostName());
             while (true) {
                 // Create new thread for the client
-                new ClientThread(serverSocket.accept()).start();
+                new ServerThread(serverSocket.accept()).start();
             }
         }
         catch (IOException e) {

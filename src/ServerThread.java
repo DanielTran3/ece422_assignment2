@@ -5,18 +5,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientThread extends Thread {
+public class ServerThread extends Thread {
 
 	private String clientID;
 	private String clientPassword;
 	private Socket clientSocket;
+	private KeyExchange serverKeys;
 
-	public ClientThread(String id, String password) {
-		clientID = id;
-		clientPassword = password;
-	}
-
-	public ClientThread(Socket accept) {
+	public ServerThread(Socket accept) {
 		this.clientSocket = accept;
 
 	}
@@ -30,6 +26,11 @@ public class ClientThread extends Thread {
 			while ((credentials = readFromClient.readLine()) != null) {
 				System.out.println(credentials);
 			}
+			serverKeys = new KeyExchange();
+			serverKeys.generateKeys();
+			
+			serverKeys.setEncryptedPublicKey(serverKeys.getPublicKey().getEncoded());
+			// Read Client encrypted public key
 			
 			readFromClient.close();
 			writeToClient.close();

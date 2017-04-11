@@ -66,7 +66,7 @@ public class KeyStorage {
 //			}
 //		return intArr;
 //	}
-	public byte[] intToByteArray(int encIntArray[]) {
+	public byte[] intToByteArray(int[] encIntArray) {
 		ByteBuffer byteBuf = ByteBuffer.allocate(encIntArray.length * 4);
 		IntBuffer intBuf = byteBuf.asIntBuffer();
 		intBuf.put(encIntArray);
@@ -94,9 +94,9 @@ public class KeyStorage {
         return intToByteArray(value);
 	}
 
-	//public String decrypt_message_String(byte[] value) {
-    //    return new String(decrypt_message(value));
-	//}
+	public String decrypt_message_String(int[] value) {
+        return new String(decrypt_message(value));
+	}
 
 	public PrivateKey getPrivateKey() {
 		return this.privKey;

@@ -54,7 +54,7 @@ public class ServerThread extends Thread {
 			int count = 0;
 			while (count != 2) {
 				credentials = (int[]) readFromClient.readObject();
-				System.out.println(serverKeys.decrypt_message(credentials));
+				System.out.println(serverKeys.decrypt_message_String(credentials));
 				count++;
 			}
 
@@ -68,27 +68,27 @@ public class ServerThread extends Thread {
 				System.out.println("waiting");
 				int_filename = (int[]) readFromClient.readObject();
 				System.out.println("Client Filename Before decryption: " + Arrays.toString(int_filename));				
-            	test_filename = serverKeys.decrypt_message(int_filename);
-				//System.out.println("Client Filename: " + clientFilename);
-            	//if (clientFilename.equals("finished")) {
-        		//	break;
-            	//}
+            	clientFilename = serverKeys.decrypt_message_String(int_filename);
+				System.out.println("Client Filename: " + clientFilename);
+            	if (clientFilename.equals("finished")) {
+        			break;
+            	}
 
-            	//File file = new File(clientFilename);
-            	//if(file.exists() && !file.isDirectory()) {
+            	File file = new File(clientFilename);
+            	if(file.exists() && !file.isDirectory()) {
             		// Acknowledgement
-            	//    writeToClient.writeObject(serverKeys.encrypt_message(fileFound.getBytes()));
-				//	writeToClient.flush();
+            	    writeToClient.writeObject(serverKeys.encrypt_message(fileFound.getBytes()));
+					writeToClient.flush();
             	    // Read in File
-            	//    fileReadIn = fileIO.readFile(file);
+            	    fileReadIn = fileIO.readFile(file);
             	    // Write encrypted file to client
-            	//    writeToClient.writeObject(serverKeys.encrypt_message(fileReadIn));
-				//	writeToClient.flush();            	
-				//}
-            	//else {
-            	//	writeToClient.writeObject(serverKeys.encrypt_message(fileNotFound.getBytes()));
-				//	writeToClient.flush();
-            	//}
+            	    writeToClient.writeObject(serverKeys.encrypt_message(fileReadIn));
+					writeToClient.flush();            	
+				}
+            	else {
+            		writeToClient.writeObject(serverKeys.encrypt_message(fileNotFound.getBytes()));
+					writeToClient.flush();
+            	}
 				break;            
 			}
 

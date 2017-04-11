@@ -40,9 +40,20 @@ public class KeyStorage {
 		this.pubKey = this.pairKey.getPublic();
 	}
 
-	public int[] byteToIntArray(byte byteKey[]) {
-		IntBuffer intBuf = ByteBuffer.wrap(byteKey).order(ByteOrder.LITTLE_ENDIAN).asIntBuffer();
-		return new int[intBuf.remaining()]; 
+//	public int[] byteToIntArray(byte byteKey[]) {
+//		IntBuffer intBuf = ByteBuffer.wrap(byteKey).order(ByteOrder.LITTLE_ENDIAN).asIntBuffer();
+//		int[] tempArray = new int[intBuf.remaining()];
+//		return intBuf.get(tempArray); 
+//	}
+	
+	public static int[] byteToIntArray(byte[] input)
+	{
+	    int[] ret = new int[input.length];
+	    for (int i = 0; i < input.length; i++)
+	    {
+	        ret[i] = input[i] & 0xff; // Range 0 to 255, not -128 to 127
+	    }
+	    return ret;
 	}
 	
 //	public int[] byteToIntArray(byte buf[]) {

@@ -71,16 +71,11 @@ public class FileIO {
 			e.printStackTrace();
 		}
 	}
-
-	public byte[] readFile(File file) {
-		byte[] read_data = new byte[(int) file.length()];
-        try {
-        	int count;
-			while ((count = readFrom.read(read_data)) > 0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        return read_data;
+	
+	public boolean fileExists(String filename) {
+		File file = new File(filename);
+		System.out.println(filename.length());
+		return file.exists();
 	}
 
 }

@@ -18,7 +18,7 @@ public class Server {
 
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            System.out.println("hostname: " + InetAddress.getLocalHost().getHostName());
+            System.out.println("Server hostname: " + InetAddress.getLocalHost().getHostName());
             while (true) {
                 // Create new thread for the client
                 new ServerThread(serverSocket.accept()).start();

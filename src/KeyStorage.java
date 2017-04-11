@@ -9,6 +9,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.*;
 
 public class KeyStorage {
 
@@ -64,10 +65,6 @@ public class KeyStorage {
         return intValue;
 	}
 
-	//public String encrypt_message_String(byte[] value) {
-        //return new String(encrypt_message(value));
-	//}
-
 	public byte[] decrypt_message(int[] value) {
         int[] intSecretKey = byteToIntArray(secretKey);
         cipher.decryption(value, intSecretKey);
@@ -75,7 +72,8 @@ public class KeyStorage {
 	}
 
 	public String decrypt_message_String(int[] value) {
-        return new String(decrypt_message(value));
+		String nullMessage = new String(decrypt_message(value));
+        return nullMessage.replaceAll("\0", "");
 	}
 
 	public PrivateKey getPrivateKey() {

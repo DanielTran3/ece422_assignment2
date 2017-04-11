@@ -66,25 +66,34 @@ public class Client {
             String ack;
             int[] intFromServer;
             byte[] fileFromServer;
-            while(!file_request.equals("exit")) {
+            while(true) {
+				if (file_request.equals("exit")) {
+					System.out.println("Ending Session...");
+            		writeToServer.writeObject(clientKeys.encrypt_message("finished".getBytes()));
+					writeToServer.flush();
+					break;
+				}
                 writeToServer.writeObject(clientKeys.encrypt_message(file_request.getBytes()));
 				writeToServer.flush();
 				System.out.println("Completed Send.");
                 intFromServer = (int[]) readFromServer.readObject();
-                ack = clientKeys.decrypt_message_String(intFromServer);
-                if (ack.equals(fileNotFound)) {
+                ack = clientKeys.decrypt_message_String(intFromServer);              
+				
+				if (ack.equals(fileNotFound)) {
                 	System.out.println(ack);
+					file_request = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
                 	continue;
                 }
                 if (ack.equals(fileFound)) {
                 	System.out.println("File Found! Displaying...");
-                	fileFromServer = clientKeys.decrypt_message((int[]) readFromServer.readObject());
-                }
+                	System.out.println("________________________________________________________________");
+					String readFile = clientKeys.decrypt_message_String((int[]) readFromServer.readObject());
+					System.out.println("File: " + readFile);
+					System.out.println("________________________________________________________________");
+				}
 				file_request = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
             }
-
-            writeToServer.writeObject(clientKeys.encrypt_message("finished".getBytes()));
-			writeToServer.flush();
+	
 			readFromServer.close();
 			writeToServer.close();
 			clientSocket.close();

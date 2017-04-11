@@ -11,7 +11,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.Arrays;
-
+import java.nio.file.Files;
 import javax.crypto.KeyAgreement;
 
 public class ServerThread extends Thread {
@@ -31,10 +31,12 @@ public class ServerThread extends Thread {
 
 	public void run() {
         System.out.println("Server Connected to Client!");
+		System.out.println("Thread Number: " + Thread.currentThread().getId());
+		System.out.println("Currently in folder: " + directory);
 		try {
 			ObjectOutputStream writeToClient = new ObjectOutputStream(serverSocket.getOutputStream());
             ObjectInputStream readFromClient = new ObjectInputStream(serverSocket.getInputStream());
-
+			
 			serverKeys = new KeyStorage();
 			serverKeys.generateKeys();
 
@@ -62,31 +64,39 @@ public class ServerThread extends Thread {
 			byte[] fileReadIn;
 			// Fix while loop
 			while(true) {
-				System.out.println("waiting");
-				int_filename = (int[]) readFromClient.readObject();
-				System.out.println("Client Filename Before decryption: " + Arrays.toString(int_filename));				
-            	clientFilename = serverKeys.decrypt_message_String(int_filename);
-				System.out.println("Client Filename: " + clientFilename);
+				System.out.println("Waiting for Client Input.");
+				int_filename = (int[]) readFromClient.readObject();			
+            	clientFilename = serverKeys.decrypt_message_String(int_filename);			
+
             	if (clientFilename.equals("finished")) {
+					System.out.println("Session with Client has Ended...");
         			break;
             	}
 
+				System.out.println("Looking for Client File: " + clientFilename);
             	File file = new File(clientFilename);
+				System.out.println("File Path: " + file.toPath());
+				System.out.println(fileIO.fileExists(clientFilename));
+
             	if(file.exists() && !file.isDirectory()) {
+					System.out.println("Sending File...");
             		// Acknowledgement
             	    writeToClient.writeObject(serverKeys.encrypt_message(fileFound.getBytes()));
 					writeToClient.flush();
+					System.out.println("Acknowledgement Sent.");
             	    // Read in File
-            	    fileReadIn = fileIO.readFile(file);
+            	    fileReadIn = Files.readAllBytes(file.toPath());
+					System.out.println("Finished Reading File.");
             	    // Write encrypted file to client
             	    writeToClient.writeObject(serverKeys.encrypt_message(fileReadIn));
 					writeToClient.flush();            	
+					System.out.println("Finished Sending File.");									
 				}
             	else {
-            		writeToClient.writeObject(serverKeys.encrypt_message(fileNotFound.getBytes()));
+					System.out.println("Failed to find file...");            	
+					writeToClient.writeObject(serverKeys.encrypt_message(fileNotFound.getBytes()));
 					writeToClient.flush();
             	}
-				break;            
 			}
 
 			readFromClient.close();

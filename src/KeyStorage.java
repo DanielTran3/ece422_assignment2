@@ -65,15 +65,20 @@ public class KeyStorage {
         return intValue;
 	}
 
+	public String decrypt_message_String(int[] value) {
+		String nullMessage = new String(decrypt_message(value));
+        return nullMessage.replaceAll("\0", "");
+	}
+
 	public byte[] decrypt_message(int[] value) {
         int[] intSecretKey = byteToIntArray(secretKey);
         cipher.decryption(value, intSecretKey);
         return intToByteArray(value);
 	}
 
-	public String decrypt_message_String(int[] value) {
-		String nullMessage = new String(decrypt_message(value));
-        return nullMessage.replaceAll("\0", "");
+	public String encrypt_message_String(int[] value) {
+		String enc_message = new String(intToByteArray(value));
+        return enc_message.replaceAll("\0", "");
 	}
 
 	public PrivateKey getPrivateKey() {

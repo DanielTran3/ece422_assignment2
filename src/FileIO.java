@@ -13,17 +13,7 @@ import java.util.List;
 
 public class FileIO {
 
-	private OutputStream writeTo;
-    private InputStream readFrom;
-
-    public FileIO(Socket sock) {
-    	try {
-			this.writeTo = sock.getOutputStream();
-	    	this.readFrom = sock.getInputStream();
-    	} catch (IOException e) {
-			e.printStackTrace();
-		}
-    }
+    public FileIO() { }
 	public List<String> readShadowFile(String filename) {
 		List<String> password_list = new ArrayList<>();
 		try {
@@ -60,10 +50,10 @@ public class FileIO {
 		}
 	}
 
-	public void writeShadowFile(String filename, String password) {
+	public void writeShadowFile(String filename, String username, String password) {
 		try {
 			PrintWriter writer = new PrintWriter(filename);
-			writer.println(password);
+			writer.println(username + '\t' + password);
 			writer.close();
 		}
 		catch(IOException e) {
@@ -71,7 +61,7 @@ public class FileIO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public boolean fileExists(String filename) {
 		File file = new File(filename);
 		System.out.println(filename.length());

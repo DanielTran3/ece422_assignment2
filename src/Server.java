@@ -5,9 +5,18 @@ import java.net.Socket;
 import java.util.List;
 
 public class Server {
-	static String shadowFile = "shadow_file.txt";
-	static List<String> passwordList;
-	
+	private static String shadowFile = "shadow_file.txt";
+	private static List<String> passwordList;
+	private static FileIO shadowFileIO;
+
+	public List<String> getPasswordList() {
+		return passwordList;
+	}
+
+	public boolean inShadowFile(String encryptedPassword) {
+		return passwordList.contains(encryptedPassword);
+	}
+
 	public static void main (String args[]) {
         if (args.length != 1) {
 			System.out.println("Please Enter Only One Inputs: Portnumber");
@@ -15,10 +24,13 @@ public class Server {
 		}
 		int port = Integer.parseInt(args[0]);
 
-
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             System.out.println("Server hostname: " + InetAddress.getLocalHost().getHostName());
+			
+			shadowFileIO = new FileIO();
+			passwordList = shadowFileIO.readShadowFile(shadowFile);		
+
             while (true) {
                 // Create new thread for the client
                 new ServerThread(serverSocket.accept()).start();

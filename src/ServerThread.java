@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -19,10 +20,13 @@ public class ServerThread extends Thread {
 	private String clientPassword;
 	private Socket serverSocket;
 	private KeyStorage serverKeys;
-
+	private static final String fileNotFound = "FILE NOT FOUND";
+	private static final String fileFound = "FILE FOUND. SENDING";
+	private FileIO fileIO;
+	
 	public ServerThread(Socket accept) {
 		this.serverSocket = accept;
-
+		fileIO = new FileIO(accept);
 	}
 
 	public void run() {
@@ -50,9 +54,31 @@ public class ServerThread extends Thread {
 			int count = 0;
 			while (count != 2) {
 				credentials = (String) readFromClient.readObject();
-				System.out.println(serverKeys.decrypt_message(credentials));
+				System.out.println(serverKeys.decrypt_message(credentials.getBytes()));
 				count++;
 			}
+			
+			String clientFilename;
+			byte[] fileReadIn;
+			while(serverSocket.getInputStream().read() != -1) {
+            	clientFilename = serverKeys.decrypt_message_String(((String) readFromClient.readObject()).getBytes());
+            	if (clientFilename.equals("finished")) {
+        			break;
+            	}
+            	
+            	File file = new File(clientFilename);
+            	if(file.exists() && !file.isDirectory()) {
+            		// Acknowledgement
+            	    writeToClient.writeObject(serverKeys.encrypt_message(fileFound.getBytes()));
+            	    // Read in File
+            	    fileReadIn = fileIO.readFile(file);
+            	    // Write encrypted file to client
+            	    writeToClient.writeObject(serverKeys.encrypt_message(fileReadIn));
+            	}
+            	else {
+            		writeToClient.writeObject(serverKeys.encrypt_message(fileNotFound.getBytes()));
+            	}
+            }
 			
 			readFromClient.close();
 			writeToClient.close();

@@ -15,6 +15,8 @@ import javax.crypto.KeyAgreement;
 public class Client {
 	
 	private static KeyStorage clientKeys;
+	private static final String fileNotFound = "FILE NOT FOUND";
+	private static final String fileFound = "FILE FOUND. SENDING";
 	
     public static void main (String args[]) {
 
@@ -56,27 +58,36 @@ public class Client {
 			clientKeys.setSecretKey(ka.generateSecret());
 			System.out.println("Secret Key: " + Arrays.toString(clientKeys.getSecretKey()));
 			
-			writeToServer.writeObject(clientKeys.encrypt_message(username));
+			writeToServer.writeObject(clientKeys.encrypt_message_String(username.getBytes()));
             writeToServer.flush();
-            writeToServer.writeObject(clientKeys.encrypt_message(password));
+            writeToServer.writeObject(clientKeys.encrypt_message_String(password.getBytes()));
             writeToServer.flush();
             
+            String file_input = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
+            String ack;
+            String fileFromServer;
+            while(!file_input.equals("exit")) {
+            	file_input = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
+                writeToServer.writeObject(clientKeys.encrypt_message_String(file_input.getBytes()));
+                ack = (String) readFromServer.readObject();
+                if (ack.equals(fileNotFound)) {
+                	System.out.println(ack);
+                	continue;
+                }
+                if (ack.equals(fileFound)) {
+                	System.out.println("File Found! Displaying...");
+                	fileFromServer = clientKeys.decrypt_message_String((byte[]) readFromServer.readObject());
+                }
+            }
+            
+            writeToServer.writeObject(clientKeys.encrypt_message("finished".getBytes()));
 			readFromServer.close();
 			writeToServer.close();
 			clientSocket.close();
         }
-        catch (IOException e) {
+        catch (IOException | ClassNotFoundException | NoSuchAlgorithmException | InvalidKeyException e) {
             System.out.println("Failed to create socket.");
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        }
     }
 }

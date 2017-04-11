@@ -1,11 +1,29 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileIO {
+	
+	OutputStream writeTo;
+    InputStream readFrom;
+	
+    public FileIO(Socket sock) {
+    	try {
+			this.writeTo = sock.getOutputStream();
+	    	this.readFrom = sock.getInputStream();
+    	} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 	public List<String> readShadowFile(String filename) {
 		List<String> password_list = new ArrayList<>();
 		try {
@@ -53,4 +71,16 @@ public class FileIO {
 			e.printStackTrace();
 		}
 	}
+	
+	public byte[] readFile(File file) {
+		byte[] read_data = new byte[(int) file.length()];
+        try {
+        	int count;
+			while ((count = readFrom.read(read_data)) > 0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        return read_data;
+	}
+	
 }

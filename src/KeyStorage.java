@@ -73,30 +73,26 @@ public class KeyStorage {
 		return byteBuf.array(); 
 	}	
 	
-	public String encrypt_message(String message) {
-        byte[] value = message.getBytes();
-		System.out.println("value: " + Arrays.toString(value));
+	public byte[] encrypt_message(byte[] value) {
         int[] intValue = byteToIntArray(value);
-		System.out.println("intValue: " + Arrays.toString(intValue));
         int[] intSecretKey = byteToIntArray(secretKey);
-		System.out.println("intSecretKey: " + Arrays.toString(intSecretKey));
         cipher.encryption(intValue, intSecretKey);
-        System.out.println("intValue After Encryption: " + Arrays.toString(intValue));
-        byte[] encryptedValue = intToByteArray(intValue);
-        return new String(encryptedValue);
+        return intToByteArray(intValue);
 	}
 	
-	public String decrypt_message(String message) {
-		byte[] value = message.getBytes();
-		System.out.println("value: " + Arrays.toString(value));
+	public String encrypt_message_String(byte[] message) {
+		return new String(encrypt_message(message));
+	}
+	
+	public byte[] decrypt_message(byte[] value) {
         int[] intValue = byteToIntArray(value);
-		System.out.println("intValue: " + Arrays.toString(intValue));
         int[] intSecretKey = byteToIntArray(secretKey);
-		System.out.println("intSecretKey: " + Arrays.toString(intSecretKey));
         cipher.decryption(intValue, intSecretKey);
-        System.out.println("intValue After Encryption: " + Arrays.toString(intValue));
-        byte[] decryptedValue = intToByteArray(intValue);
-        return new String(decryptedValue);
+        return intToByteArray(intValue);
+	}
+	
+	public String decrypt_message_String(byte[] message) {
+		return new String(decrypt_message(message));
 	}
 	
 	public PrivateKey getPrivateKey() {

@@ -26,6 +26,7 @@ JNIEXPORT void JNICALL Java_TEA_encryption
       exit(0);
     }
 	encrypt(v_copy, k_copy);
+	(*env)->SetIntArrayRegion(env, v, 0, len_v, v_copy);
 }
 
 void encrypt(jint* v, jint* k) {

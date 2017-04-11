@@ -56,19 +56,27 @@ public class Client {
 			ka.init(clientKeys.getPrivateKey());
 			ka.doPhase(serverPubKey, true);
 			clientKeys.setSecretKey(ka.generateSecret());
-			//System.out.println("Secret Key: " + Arrays.toString(clientKeys.getSecretKey()));
-
+			System.out.println("Secret Key: " + Arrays.toString(clientKeys.getSecretKey()));
+			
+			//System.out.println("Sending Username: " + username);
+			//System.out.println("Username encrypted: " + Arrays.toString(clientKeys.encrypt_message(username.getBytes())));
 			writeToServer.writeObject(clientKeys.encrypt_message(username.getBytes()));
             writeToServer.flush();
+		
+			//System.out.println("Sending Password: " + password);
+			//System.out.println("Password encrypted: " + Arrays.toString(clientKeys.encrypt_message(password.getBytes())));
             writeToServer.writeObject(clientKeys.encrypt_message(password.getBytes()));
             writeToServer.flush();
+	
+			//System.out.println("decrpyted password (btye[]): " + Arrays.toString(clientKeys.decrypt_message(clientKeys.encrypt_message(password.getBytes()))));
+			//System.out.println("decrpyted password: " + clientKeys.decrypt_message_String(clientKeys.encrypt_message(password.getBytes())));
 
             String file_input = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
             String ack;
-            String fileFromServer;
+            byte[] fileFromServer;
             while(!file_input.equals("exit")) {
-				byte[] test = clientKeys.encrypt_message(file_input.getBytes());
-				System.out.println("test: " + clientKeys.encrypt_message_String(file_input.getBytes()));
+				int[] test = clientKeys.encrypt_message(file_input.getBytes());
+				System.out.println("test: " + clientKeys.encrypt_message(file_input.getBytes()));
 				System.out.println(test);
                 writeToServer.writeObject(clientKeys.encrypt_message(file_input.getBytes()));
 				writeToServer.flush();
@@ -81,7 +89,7 @@ public class Client {
                 }
                 if (ack.equals(fileFound)) {
                 	System.out.println("File Found! Displaying...");
-                	fileFromServer = clientKeys.decrypt_message_String((byte[]) readFromServer.readObject());
+                	fileFromServer = clientKeys.decrypt_message((int[]) readFromServer.readObject());
                 }
 				file_input = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
             }

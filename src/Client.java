@@ -14,7 +14,7 @@ import java.util.Arrays;
 import javax.crypto.KeyAgreement;
 public class Client {
 	
-	private static KeyExchange clientKeys;
+	private static KeyStorage clientKeys;
 	
     public static void main (String args[]) {
 
@@ -49,7 +49,7 @@ public class Client {
             writeToServer.flush();
             
             //----------- After authentication is good, make, encrypt, and send keys
-            clientKeys = new KeyExchange();
+            clientKeys = new KeyStorage();
             clientKeys.generateKeys();
             
             writeToServer.writeObject(clientKeys.getPublicKey());

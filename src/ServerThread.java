@@ -18,7 +18,7 @@ public class ServerThread extends Thread {
 	private String clientID;
 	private String clientPassword;
 	private Socket serverSocket;
-	private KeyExchange serverKeys;
+	private KeyStorage serverKeys;
 
 	public ServerThread(Socket accept) {
 		this.serverSocket = accept;
@@ -36,7 +36,7 @@ public class ServerThread extends Thread {
 			while ((credentials = (String) readFromClient.readObject()) != null) {
 				System.out.println(credentials);
 			}
-			serverKeys = new KeyExchange();
+			serverKeys = new KeyStorage();
 			serverKeys.generateKeys();
 			
 			PublicKey clientPubKey = (PublicKey) readFromClient.readObject();

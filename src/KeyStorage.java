@@ -10,7 +10,7 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
-public class KeyExchange {
+public class KeyStorage {
 	
 	private KeyPairGenerator keyGenDH;
 	private KeyPair pairKey;
@@ -24,7 +24,7 @@ public class KeyExchange {
 		System.loadLibrary("encryption");
 		System.loadLibrary("decryption");
 	}
-	public KeyExchange() {
+	public KeyStorage() {
 		try {
 			this.keyGenDH = KeyPairGenerator.getInstance("DiffieHellman");
 			this.keyGenDH.initialize(512, new SecureRandom());

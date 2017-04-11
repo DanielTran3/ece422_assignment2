@@ -60,7 +60,14 @@ public class ServerThread extends Thread {
 			
 			String clientFilename;
 			byte[] fileReadIn;
-			while(serverSocket.getInputStream().read() != -1) {
+			while(serverSocket.isClosed()) {
+				System.out.println("waiting");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             	clientFilename = serverKeys.decrypt_message_String(((String) readFromClient.readObject()).getBytes());
             	if (clientFilename.equals("finished")) {
         			break;

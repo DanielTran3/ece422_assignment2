@@ -56,20 +56,25 @@ public class Client {
 			ka.init(clientKeys.getPrivateKey());
 			ka.doPhase(serverPubKey, true);
 			clientKeys.setSecretKey(ka.generateSecret());
-			System.out.println("Secret Key: " + Arrays.toString(clientKeys.getSecretKey()));
+			//System.out.println("Secret Key: " + Arrays.toString(clientKeys.getSecretKey()));
 
-			writeToServer.writeObject(clientKeys.encrypt_message_String(username.getBytes()));
+			writeToServer.writeObject(clientKeys.encrypt_message(username.getBytes()));
             writeToServer.flush();
-            writeToServer.writeObject(clientKeys.encrypt_message_String(password.getBytes()));
+            writeToServer.writeObject(clientKeys.encrypt_message(password.getBytes()));
             writeToServer.flush();
 
             String file_input = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
             String ack;
             String fileFromServer;
             while(!file_input.equals("exit")) {
-            	file_input = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
-                writeToServer.writeObject(clientKeys.encrypt_message_String(file_input.getBytes()));
+				byte[] test = clientKeys.encrypt_message(file_input.getBytes());
+				System.out.println("test: " + clientKeys.encrypt_message_String(file_input.getBytes()));
+				System.out.println(test);
+                writeToServer.writeObject(clientKeys.encrypt_message(file_input.getBytes()));
+				writeToServer.flush();
+				System.out.println("Completed Send.");
                 ack = (String) readFromServer.readObject();
+				System.out.println(ack);
                 if (ack.equals(fileNotFound)) {
                 	System.out.println(ack);
                 	continue;
@@ -78,9 +83,11 @@ public class Client {
                 	System.out.println("File Found! Displaying...");
                 	fileFromServer = clientKeys.decrypt_message_String((byte[]) readFromServer.readObject());
                 }
+				file_input = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
             }
 
             writeToServer.writeObject(clientKeys.encrypt_message("finished".getBytes()));
+			writeToServer.flush();
 			readFromServer.close();
 			writeToServer.close();
 			clientSocket.close();

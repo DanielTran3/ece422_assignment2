@@ -48,29 +48,27 @@ public class ServerThread extends Thread {
 			ka.init(serverKeys.getPrivateKey());
 			ka.doPhase(clientPubKey, true);
 			serverKeys.setSecretKey(ka.generateSecret());
-			System.out.println("Secret Key: " + Arrays.toString(serverKeys.getSecretKey()));
+			//System.out.println("Secret Key: " + Arrays.toString(serverKeys.getSecretKey()));
 
-			String credentials;
+			byte[] credentials;
 			int count = 0;
 			while (count != 2) {
-				credentials = (String) readFromClient.readObject();
-				System.out.println(serverKeys.decrypt_message_String(credentials.getBytes()));
+				credentials = (byte[]) readFromClient.readObject();
+				System.out.println(serverKeys.decrypt_message_String(credentials));
 				count++;
 			}
 
 			String clientFilename;
+			byte[] byte_filename;
 			byte[] fileReadIn;
 			// Fix while loop
 //			while(serverSocket.isClosed()) {
 			while(true) {
 				System.out.println("waiting");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            	clientFilename = serverKeys.decrypt_message_String(((String) readFromClient.readObject()).getBytes());
+				byte_filename = (byte[]) readFromClient.readObject();
+				System.out.println("Client Filename Before decryption: " + Arrays.toString(byte_filename));				
+            	clientFilename = serverKeys.decrypt_message_String(byte_filename);
+				System.out.println("Client Filename: " + clientFilename);
             	if (clientFilename.equals("finished")) {
         			break;
             	}
@@ -79,13 +77,16 @@ public class ServerThread extends Thread {
             	if(file.exists() && !file.isDirectory()) {
             		// Acknowledgement
             	    writeToClient.writeObject(serverKeys.encrypt_message(fileFound.getBytes()));
+					writeToClient.flush();
             	    // Read in File
             	    fileReadIn = fileIO.readFile(file);
             	    // Write encrypted file to client
             	    writeToClient.writeObject(serverKeys.encrypt_message(fileReadIn));
-            	}
+					writeToClient.flush();            	
+				}
             	else {
             		writeToClient.writeObject(serverKeys.encrypt_message(fileNotFound.getBytes()));
+					writeToClient.flush();
             	}
             }
 

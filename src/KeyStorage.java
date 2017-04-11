@@ -83,27 +83,18 @@ public class KeyStorage {
 	}
 
 	public String encrypt_message_String(byte[] value) {
-		int[] intValue = byteToIntArray(value);
-        int[] intSecretKey = byteToIntArray(secretKey);
-        cipher.encryption(intValue, intSecretKey);
-        byte[] encryptedValue = intToByteArray(intValue);
-        return new String(encryptedValue);
+        return new String(encrypt_message(value));
 	}
 
 	public byte[] decrypt_message(byte[] value) {
         int[] intValue = byteToIntArray(value);
         int[] intSecretKey = byteToIntArray(secretKey);
         cipher.decryption(intValue, intSecretKey);
-
         return intToByteArray(intValue);
 	}
 
 	public String decrypt_message_String(byte[] value) {
-		int[] intValue = byteToIntArray(value);
-        int[] intSecretKey = byteToIntArray(secretKey);
-        cipher.decryption(intValue, intSecretKey);
-        byte[] decryptedValue = intToByteArray(intValue);
-        return new String(decryptedValue);
+        return new String(decrypt_message(value));
 	}
 
 	public PrivateKey getPrivateKey() {

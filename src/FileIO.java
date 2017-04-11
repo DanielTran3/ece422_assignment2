@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileIO {
-	
-	OutputStream writeTo;
-    InputStream readFrom;
-	
+
+	private OutputStream writeTo;
+    private InputStream readFrom;
+
     public FileIO(Socket sock) {
     	try {
 			this.writeTo = sock.getOutputStream();
@@ -44,7 +44,7 @@ public class FileIO {
 
 		return password_list;
 	}
-	
+
 	public void bulkWriteShadowFile(String filename, List<String> list_of_passwords) {
 		try {
 			PrintWriter writer = new PrintWriter(filename);
@@ -59,7 +59,7 @@ public class FileIO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void writeShadowFile(String filename, String password) {
 		try {
 			PrintWriter writer = new PrintWriter(filename);
@@ -71,7 +71,7 @@ public class FileIO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public byte[] readFile(File file) {
 		byte[] read_data = new byte[(int) file.length()];
         try {
@@ -82,5 +82,5 @@ public class FileIO {
 		}
         return read_data;
 	}
-	
+
 }

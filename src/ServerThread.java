@@ -21,9 +21,9 @@ public class ServerThread extends Thread {
 	private Socket serverSocket;
 	private KeyStorage serverKeys;
 	private static final String fileNotFound = "FILE NOT FOUND";
-	private static final String fileFound = "FILE FOUND. SENDING";
+	private static final String fileFound = "FILE FOUND";
 	private FileIO fileIO;
-	
+
 	public ServerThread(Socket accept) {
 		this.serverSocket = accept;
 		fileIO = new FileIO(accept);
@@ -36,14 +36,14 @@ public class ServerThread extends Thread {
             //BufferedReader readFromClient = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 			ObjectOutputStream writeToClient = new ObjectOutputStream(serverSocket.getOutputStream());
             ObjectInputStream readFromClient = new ObjectInputStream(serverSocket.getInputStream());
-			
+
 			serverKeys = new KeyStorage();
 			serverKeys.generateKeys();
-			
+
 			PublicKey clientPubKey = (PublicKey) readFromClient.readObject();
             writeToClient.writeObject(serverKeys.getPublicKey());
             writeToClient.flush();
-            
+
             KeyAgreement ka = KeyAgreement.getInstance("DH");
 			ka.init(serverKeys.getPrivateKey());
 			ka.doPhase(clientPubKey, true);
@@ -57,7 +57,7 @@ public class ServerThread extends Thread {
 				System.out.println(serverKeys.decrypt_message_String(credentials.getBytes()));
 				count++;
 			}
-			
+
 			String clientFilename;
 			byte[] fileReadIn;
 			// Fix while loop
@@ -74,7 +74,7 @@ public class ServerThread extends Thread {
             	if (clientFilename.equals("finished")) {
         			break;
             	}
-            	
+
             	File file = new File(clientFilename);
             	if(file.exists() && !file.isDirectory()) {
             		// Acknowledgement
@@ -88,7 +88,7 @@ public class ServerThread extends Thread {
             		writeToClient.writeObject(serverKeys.encrypt_message(fileNotFound.getBytes()));
             	}
             }
-			
+
 			readFromClient.close();
 			writeToClient.close();
 			this.serverSocket.close();

@@ -13,11 +13,11 @@ import java.util.Arrays;
 
 import javax.crypto.KeyAgreement;
 public class Client {
-	
+
 	private static KeyStorage clientKeys;
 	private static final String fileNotFound = "FILE NOT FOUND";
-	private static final String fileFound = "FILE FOUND. SENDING";
-	
+	private static final String fileFound = "FILE FOUND";
+
     public static void main (String args[]) {
 
         if (args.length != 2) {
@@ -44,11 +44,11 @@ public class Client {
     		}
     		String username = readInput.readLine("Enter your Username: ");
     		String password = readInput.readLine("Enter your Password: ");
-            
+
             //----------- After authentication is good, make, encrypt, and send keys
             clientKeys = new KeyStorage();
             clientKeys.generateKeys();
-            
+
             writeToServer.writeObject(clientKeys.getPublicKey());
             writeToServer.flush();
             PublicKey serverPubKey = (PublicKey) readFromServer.readObject();
@@ -57,12 +57,12 @@ public class Client {
 			ka.doPhase(serverPubKey, true);
 			clientKeys.setSecretKey(ka.generateSecret());
 			System.out.println("Secret Key: " + Arrays.toString(clientKeys.getSecretKey()));
-			
+
 			writeToServer.writeObject(clientKeys.encrypt_message_String(username.getBytes()));
             writeToServer.flush();
             writeToServer.writeObject(clientKeys.encrypt_message_String(password.getBytes()));
             writeToServer.flush();
-            
+
             String file_input = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
             String ack;
             String fileFromServer;
@@ -79,7 +79,7 @@ public class Client {
                 	fileFromServer = clientKeys.decrypt_message_String((byte[]) readFromServer.readObject());
                 }
             }
-            
+
             writeToServer.writeObject(clientKeys.encrypt_message("finished".getBytes()));
 			readFromServer.close();
 			writeToServer.close();

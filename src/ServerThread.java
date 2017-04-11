@@ -32,13 +32,7 @@ public class ServerThread extends Thread {
             //BufferedReader readFromClient = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 			ObjectOutputStream writeToClient = new ObjectOutputStream(serverSocket.getOutputStream());
             ObjectInputStream readFromClient = new ObjectInputStream(serverSocket.getInputStream());
-			String credentials;
-			int count = 0;
-			while (count != 2) {
-				credentials = (String) readFromClient.readObject();
-				System.out.println(credentials);
-				count++;
-			}
+			
 			serverKeys = new KeyStorage();
 			serverKeys.generateKeys();
 			
@@ -49,14 +43,16 @@ public class ServerThread extends Thread {
             KeyAgreement ka = KeyAgreement.getInstance("DH");
 			ka.init(serverKeys.getPrivateKey());
 			ka.doPhase(clientPubKey, true);
-			byte[] secretKey = ka.generateSecret();
-			System.out.println(Arrays.toString(secretKey));
-			//serverKeys.setEncryptedPublicKey(serverKeys.encrypt_key(serverKeys.getPublicKey()));
-            //System.out.println("Encrypted Key: " + serverKeys.getEncryptedPublicKey());
-            //System.out.println("DecryptedKey: " + serverKeys.decrypt_key(serverKeys.getEncryptedPublicKey()));
+			serverKeys.setSecretKey(ka.generateSecret());
+			System.out.println("Secret Key: " + Arrays.toString(serverKeys.getSecretKey()));
 
-			//serverKeys.setEncryptedPublicKey(serverKeys.getPublicKey().getEncoded());
-			// Read Client encrypted public key
+			String credentials;
+			int count = 0;
+			while (count != 2) {
+				credentials = (String) readFromClient.readObject();
+				System.out.println(serverKeys.decrypt_message(credentials));
+				count++;
+			}
 			
 			readFromClient.close();
 			writeToClient.close();

@@ -42,11 +42,6 @@ public class Client {
     		}
     		String username = readInput.readLine("Enter your Username: ");
     		String password = readInput.readLine("Enter your Password: ");
-
-            writeToServer.writeObject(username);
-            writeToServer.flush();
-            writeToServer.writeObject(password);
-            writeToServer.flush();
             
             //----------- After authentication is good, make, encrypt, and send keys
             clientKeys = new KeyStorage();
@@ -58,19 +53,13 @@ public class Client {
 			KeyAgreement ka = KeyAgreement.getInstance("DH");
 			ka.init(clientKeys.getPrivateKey());
 			ka.doPhase(serverPubKey, true);
-			byte[] secretKey = ka.generateSecret();
-			System.out.println(Arrays.toString(secretKey));
-            // Encrypt the public key
-            // Pass: clientKeys.getPublicKey().getEncoded() into TEA encryption
-            //clientKeys.setEncryptedPublicKey(clientKeys.encrypt_key(clientKeys.getPublicKey()));
-            //System.out.println("Encrypted Key: " + clientKeys.getEncryptedPublicKey());
-            //System.out.println("DecryptedKey: " + clientKeys.decrypt_key(clientKeys.getEncryptedPublicKey()));
-            // Send public key
-            //writeToServer.println(clientKeys.getEncryptedPublicKey());
-            
-            // Receive server's encrypted public key
-            //String str_encServerKey = readFromServer.readLine();
-            //clientKeys.setEncServerKey();
+			clientKeys.setSecretKey(ka.generateSecret());
+			System.out.println("Secret Key: " + Arrays.toString(clientKeys.getSecretKey()));
+			
+			writeToServer.writeObject(clientKeys.encrypt_message(username));
+            writeToServer.flush();
+            writeToServer.writeObject(clientKeys.encrypt_message(password));
+            writeToServer.flush();
             
 			readFromServer.close();
 			writeToServer.close();

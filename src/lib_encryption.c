@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <jni.h>
-#include "Insertionsort.h"
+#include "TEA.h"
 
 void encrypt(jint*, jint*);
 
 JNIEXPORT void JNICALL Java_TEA_encryption
-  (JNIEnv *env, jobject, jintArray, jintArray) {
+  (JNIEnv *env, jobject object, jintArray v, jintArray k) {
     jsize len_v;
     jsize len_k;
     jint *v_copy;
@@ -19,25 +19,25 @@ JNIEXPORT void JNICALL Java_TEA_encryption
     len_k = (*env)->GetArrayLength(env, k);
 
     // Get a pointer to the array
-    array_copy = (jint *) (*env)->GetIntArrayElements(env, array_to_sort, is_copy);
-    array_copy = (jint *) (*env)->GetIntArrayElements(env, , is_copy);
-    if (array_copy == NULL){
+    v_copy = (jint *) (*env)->GetIntArrayElements(env, v, is_copy);
+    k_copy = (jint *) (*env)->GetIntArrayElements(env, k, is_copy);
+    if ((v_copy == NULL) || (k_copy == NULL)){
       printf("Cannot obtain array from JVM\n");
       exit(0);
     }
+	encrypt(v_copy, k_copy);
 }
 
 void encrypt(jint* v, jint* k) {
-    unsigned int n=32, sum, y=v[0], z=v[1];
-    unsigned int delta=0x9e3779b9l;
+	unsigned int y = v[0], z=v[1], sum = 0;
+	unsigned int delta = 0x9e3779b9, n=32;
 
-        sum = delta<<5;
-        while (n-- > 0){
-            z -= (y<<4) + k[2] ^ y + sum ^ (y>>5) + k[3];
-            y -= (z<<4) + k[0] ^ z + sum ^ (z>>5) + k[1];
-            sum -= delta;
-        }
-        v[0] = y;
-        v[1] = z;
-    }
+	while (n-- > 0){
+		sum += delta;
+		y += (z<<4) + k[0] ^ z + sum ^ (z>>5) + k[1];
+		z += (y<<4) + k[2] ^ y + sum ^ (y>>5) + k[3];
+	}
+
+	v[0] = y;
+	v[1] = z;
 }

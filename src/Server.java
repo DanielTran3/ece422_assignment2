@@ -7,8 +7,7 @@ import java.util.List;
 public class Server {
 	static String shadowFile = "shadow_file.txt";
 	static List<String> passwordList;
-
-
+	
 	public static void main (String args[]) {
         if (args.length != 1) {
 			System.out.println("Please Enter Only One Inputs: Portnumber");

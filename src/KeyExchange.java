@@ -20,11 +20,14 @@ public class KeyExchange {
 	private String encrypt_pubKey;
 	private byte[] serverKey;
 	private TEA cipher;
-
+	static {
+		System.loadLibrary("encryption");
+		System.loadLibrary("decryption");
+	}
 	public KeyExchange() {
 		try {
 			this.keyGenDH = KeyPairGenerator.getInstance("DiffieHellman");
-			this.keyGenDH.initialize(128, new SecureRandom());
+			this.keyGenDH.initialize(1024, new SecureRandom());
 			this.encrypt_privKey = null;
 			this.encrypt_pubKey = null;
 			this.serverKey = null;
@@ -77,7 +80,6 @@ public class KeyExchange {
         System.arraycopy(intRightKey, 0, decryptedIntArray, intLeftKey.length, intRightKey.length);
         byte[] encryptedByteArray = intToByteArray(decryptedIntArray);
         return new String(encryptedByteArray);
-        //this.encrypt_pubKey = 
 	}
 	
 	public PrivateKey getPrivateKey() {

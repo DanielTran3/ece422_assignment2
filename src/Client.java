@@ -21,8 +21,6 @@ public class Client {
         Console readInput = System.console();
 
         try {
-        	TEA encrypt = new TEA();
-        	TEA decrypt = new TEA();
             System.out.println("Connecting to Computer: " + hostname + " On port: " + port);
             Socket clientSocket = new Socket(hostname, port);
             System.out.println("Connection Successful!");

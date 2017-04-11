@@ -54,13 +54,15 @@ public class ServerThread extends Thread {
 			int count = 0;
 			while (count != 2) {
 				credentials = (String) readFromClient.readObject();
-				System.out.println(serverKeys.decrypt_message(credentials.getBytes()));
+				System.out.println(serverKeys.decrypt_message_String(credentials.getBytes()));
 				count++;
 			}
 			
 			String clientFilename;
 			byte[] fileReadIn;
-			while(serverSocket.isClosed()) {
+			// Fix while loop
+//			while(serverSocket.isClosed()) {
+			while(true) {
 				System.out.println("waiting");
 				try {
 					Thread.sleep(1000);

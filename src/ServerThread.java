@@ -33,8 +33,11 @@ public class ServerThread extends Thread {
 			ObjectOutputStream writeToClient = new ObjectOutputStream(serverSocket.getOutputStream());
             ObjectInputStream readFromClient = new ObjectInputStream(serverSocket.getInputStream());
 			String credentials;
-			while ((credentials = (String) readFromClient.readObject()) != null) {
+			int count = 0;
+			while (count != 2) {
+				credentials = (String) readFromClient.readObject();
 				System.out.println(credentials);
+				count++;
 			}
 			serverKeys = new KeyStorage();
 			serverKeys.generateKeys();

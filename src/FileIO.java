@@ -8,6 +8,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,10 +53,10 @@ public class FileIO {
 		}
 	}
 
-	public void writeShadowFile(String filename, String username, String password) {
+	public void writeShadowFile(String filename, String salt, String username, String password) {
 		try {
 			PrintWriter writer = new PrintWriter(filename);
-			writer.println(username + '\t' + password);
+			writer.println(username + '\t' + salt + "$" + password);
 			writer.close();
 		}
 		catch(IOException e) {
@@ -61,7 +64,7 @@ public class FileIO {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public boolean fileExists(String filename) {
 		File file = new File(filename);
 		System.out.println(filename.length());

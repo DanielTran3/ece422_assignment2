@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.nio.file.Files;
 import javax.crypto.KeyAgreement;
 
-public class CreateAccount extends Thread {
+public class CreateAccountThread extends Thread {
 
 	private String clientID;
 	private String clientPassword;
@@ -23,9 +23,10 @@ public class CreateAccount extends Thread {
 	private static final String fileNotFound = "FILE NOT FOUND";
 	private static final String fileFound = "FILE FOUND";
 	private FileIO fileIO;
+	private Hashing hashing;
 	private String directory = System.getProperty("user.dir");
 
-	public CreateAccount(Socket accept) {
+	public CreateAccountThread(Socket accept) {
 		this.serverSocket = accept;
 		fileIO = new FileIO();
 	}
@@ -52,12 +53,18 @@ public class CreateAccount extends Thread {
 
 			String username;
 			String password;
-			while (true) {
+			byte[] salt;
+			int count = 0;
+			while (count < 10) {
 				username = serverKeys.decrypt_message_String((int[]) readFromClient.readObject());
 				password = serverKeys.decrypt_message_String((int[]) readFromClient.readObject());
-				System.out.println("Encrypted Username: " + username);
-				System.out.println("Encrypted Password: " + username);
-				System.out.println(serverKeys.decrypt_message_String((int[]) readFromClient.readObject()));
+				System.out.println("Decrypted Username: " + username);
+				System.out.println("Decrypted Password: " + username);
+				salt = hashing.generateSalt();
+				
+				password = hashing.sha256Hash(salt, password);
+				fileIO.writeShadowFile(Server.getShadowFile(), salt.toString(), username, password);
+				count++;
 			}
 
 			readFromClient.close();

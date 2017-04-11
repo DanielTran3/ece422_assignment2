@@ -17,6 +17,10 @@ public class Server {
 		return passwordList.contains(encryptedPassword);
 	}
 
+	public static String getShadowFile() {
+		return shadowFile;
+	}
+	
 	public static void main (String args[]) {
         if (args.length != 1) {
 			System.out.println("Please Enter Only One Inputs: Portnumber");

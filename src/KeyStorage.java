@@ -40,21 +40,21 @@ public class KeyStorage {
 		this.pubKey = this.pairKey.getPublic();
 	}
 
-	//public int[] byteToIntArray(byte byteKey[]) {
-	//	IntBuffer intBuf = ByteBuffer.wrap(byteKey).order(ByteOrder.LITTLE_ENDIAN).asIntBuffer();
-	//	return new int[intBuf.remaining()]; 
-	//}
+	public int[] byteToIntArray(byte byteKey[]) {
+		IntBuffer intBuf = ByteBuffer.wrap(byteKey).order(ByteOrder.LITTLE_ENDIAN).asIntBuffer();
+		return new int[intBuf.remaining()]; 
+	}
 	
-	public int[] byteToIntArray(byte buf[]) {
-		int intArr[] = new int[buf.length / 4];
-		int offset = 0;
-		for(int i = 0; i < intArr.length; i++) {
-			intArr[i] = (buf[3 + offset] & 0xFF) | ((buf[2 + offset] & 0xFF) << 8) |
-	              ((buf[1 + offset] & 0xFF) << 16) | ((buf[0 + offset] & 0xFF) << 24);  
-			offset += 4;
-			}
-		return intArr;
-	}	
+//	public int[] byteToIntArray(byte buf[]) {
+//		int intArr[] = new int[buf.length / 4];
+//		int offset = 0;
+//		for(int i = 0; i < intArr.length; i++) {
+//			intArr[i] = (buf[3 + offset] & 0xFF) | ((buf[2 + offset] & 0xFF) << 8) |
+//	              ((buf[1 + offset] & 0xFF) << 16) | ((buf[0 + offset] & 0xFF) << 24);  
+//			offset += 4;
+//			}
+//		return intArr;
+//	}	
 	public byte[] intToByteArray(int encIntArray[]) {
 		ByteBuffer byteBuf = ByteBuffer.allocate(encIntArray.length * 4);
 		IntBuffer intBuf = byteBuf.asIntBuffer();

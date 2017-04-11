@@ -30,7 +30,7 @@ public class Client {
 
             if (readInput == null) {
     			System.out.println("Error in reading from console.");
-    			System.exit(0);
+    			System.exit(0);bufferedreader
     		}
     		String username = readInput.readLine("Enter your Username: ");
     		String password = readInput.readLine("Enter your Password: ");
@@ -42,11 +42,15 @@ public class Client {
             clientKeys = new KeyExchange();
             clientKeys.generateKeys();
             
+			KeyAgreement ka = new KeyAgreement();
+			ka.init(clientKeys.getPrivateKey());
+			
+
             // Encrypt the public key
             // Pass: clientKeys.getPublicKey().getEncoded() into TEA encryption
-            clientKeys.setEncryptedPublicKey(clientKeys.encrypt_key(clientKeys.getPublicKey()));
-            System.out.println("Encrypted Key: " + clientKeys.getEncryptedPublicKey());
-            System.out.println("DecryptedKey: " + clientKeys.decrypt_key(clientKeys.getEncryptedPublicKey()));
+            //clientKeys.setEncryptedPublicKey(clientKeys.encrypt_key(clientKeys.getPublicKey()));
+            //System.out.println("Encrypted Key: " + clientKeys.getEncryptedPublicKey());
+            //System.out.println("DecryptedKey: " + clientKeys.decrypt_key(clientKeys.getEncryptedPublicKey()));
             // Send public key
             //writeToServer.println(clientKeys.getEncryptedPublicKey());
             

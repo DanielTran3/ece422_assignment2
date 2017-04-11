@@ -27,7 +27,7 @@ public class KeyExchange {
 	public KeyExchange() {
 		try {
 			this.keyGenDH = KeyPairGenerator.getInstance("DiffieHellman");
-			this.keyGenDH.initialize(1024, new SecureRandom());
+			this.keyGenDH.initialize(512, new SecureRandom());
 			this.encrypt_privKey = null;
 			this.encrypt_pubKey = null;
 			this.serverKey = null;
@@ -38,29 +38,46 @@ public class KeyExchange {
 		}
 	}
 	
-	public int[] byteToIntArray(byte byteKey[]) {
-		IntBuffer intBuf = ByteBuffer.wrap(byteKey).order(ByteOrder.LITTLE_ENDIAN).asIntBuffer();
-		return new int[intBuf.remaining()]; 
-	}
-	
-	public byte[] intToByteArray(int encIntArray[]) {
-		ByteBuffer byteBuf = ByteBuffer.allocate(encIntArray.length * 4);
-		IntBuffer intBuf = byteBuf.asIntBuffer();
-		intBuf.put(encIntArray);
-		return byteBuf.array(); 
-	}
-	
 	public void generateKeys() {
 		this.pairKey = this.keyGenDH.generateKeyPair();
 		this.privKey = this.pairKey.getPrivate();
 		this.pubKey = this.pairKey.getPublic();
 	}
+
+	//public int[] byteToIntArray(byte byteKey[]) {
+	//	IntBuffer intBuf = ByteBuffer.wrap(byteKey).order(ByteOrder.LITTLE_ENDIAN).asIntBuffer();
+	//	return new int[intBuf.remaining()]; 
+	//}
+	
+	public int[] byteToIntArray(byte buf[]) {
+		int intArr[] = new int[buf.length / 4];
+	   int offset = 0;
+	   for(int i = 0; i < intArr.length; i++) {
+		  intArr[i] = (buf[3 + offset] & 0xFF) | ((buf[2 + offset] & 0xFF) << 8) |
+		              ((buf[1 + offset] & 0xFF) << 16) | ((buf[0 + offset] & 0xFF) << 24);  
+	   offset += 4;
+	   }
+	   return intArr;
+	}	
+	public byte[] intToByteArray(int encIntArray[]) {
+		ByteBuffer byteBuf = ByteBuffer.allocate(encIntArray.length * 4);
+		IntBuffer intBuf = byteBuf.asIntBuffer();
+		intBuf.put(encIntArray);
+		return byteBuf.array(); 
+	}	
 	
 	public String encrypt_key(Key key) {
-        byte[] leftKey = Arrays.copyOfRange(key.getEncoded(), 0, 31);
-        byte[] rightKey = Arrays.copyOfRange(key.getEncoded(), 32, 63);
+		System.out.println(key);
+		System.out.println("Full Key: " + Arrays.toString(key.getEncoded()));
+		System.out.println("Full Key Length: " + key.getEncoded().length);
+        byte[] leftKey = Arrays.copyOfRange(key.getEncoded(), 0, 113);
+		System.out.println("leftKey: " + Arrays.toString(leftKey));
+        byte[] rightKey = Arrays.copyOfRange(key.getEncoded(), 113, 227);
+		System.out.println("rightKey: " + Arrays.toString(rightKey));
         int[] intLeftKey = byteToIntArray(leftKey);
+		System.out.println("intLeftKey: " + Arrays.toString(intLeftKey));
         int[] intRightKey = byteToIntArray(rightKey);
+		System.out.println("intRightKey: " + Arrays.toString(intRightKey));
         cipher.encryption(intLeftKey, intRightKey);
         int[] encryptedIntArray = new int[intLeftKey.length + intRightKey.length];
         System.arraycopy(intLeftKey, 0, encryptedIntArray, 0, intLeftKey.length);
@@ -70,8 +87,8 @@ public class KeyExchange {
 	}
 	
 	public String decrypt_key(String key) {
-        byte[] leftKey = Arrays.copyOfRange(key.getBytes(), 0, 31);
-        byte[] rightKey = Arrays.copyOfRange(key.getBytes(), 32, 63);
+        byte[] leftKey = Arrays.copyOfRange(key.getBytes(), 0, 113);
+        byte[] rightKey = Arrays.copyOfRange(key.getBytes(), 113, 227);
         int[] intLeftKey = byteToIntArray(leftKey);
         int[] intRightKey = byteToIntArray(rightKey);
         cipher.decryption(intLeftKey, intRightKey);

@@ -29,7 +29,11 @@ public class ServerThread extends Thread {
 			serverKeys = new KeyExchange();
 			serverKeys.generateKeys();
 			
-			serverKeys.setEncryptedPublicKey(serverKeys.getPublicKey().getEncoded());
+			serverKeys.setEncryptedPublicKey(serverKeys.encrypt_key(serverKeys.getPublicKey()));
+            System.out.println("Encrypted Key: " + serverKeys.getEncryptedPublicKey());
+            System.out.println("DecryptedKey: " + serverKeys.decrypt_key(serverKeys.getEncryptedPublicKey()));
+
+			//serverKeys.setEncryptedPublicKey(serverKeys.getPublicKey().getEncoded());
 			// Read Client encrypted public key
 			
 			readFromClient.close();

@@ -77,22 +77,33 @@ public class KeyStorage {
         int[] intValue = byteToIntArray(value);
         int[] intSecretKey = byteToIntArray(secretKey);
         cipher.encryption(intValue, intSecretKey);
+//        byte[] encryptedValue = intToByteArray(intValue);
+//        return new String(encryptedValue);
         return intToByteArray(intValue);
 	}
 	
-	public String encrypt_message_String(byte[] message) {
-		return new String(encrypt_message(message));
+	public String encrypt_message_String(byte[] value) {
+		int[] intValue = byteToIntArray(value);
+        int[] intSecretKey = byteToIntArray(secretKey);
+        cipher.encryption(intValue, intSecretKey);
+        byte[] encryptedValue = intToByteArray(intValue);
+        return new String(encryptedValue);
 	}
 	
 	public byte[] decrypt_message(byte[] value) {
         int[] intValue = byteToIntArray(value);
         int[] intSecretKey = byteToIntArray(secretKey);
         cipher.decryption(intValue, intSecretKey);
+
         return intToByteArray(intValue);
 	}
 	
-	public String decrypt_message_String(byte[] message) {
-		return new String(decrypt_message(message));
+	public String decrypt_message_String(byte[] value) {
+		int[] intValue = byteToIntArray(value);
+        int[] intSecretKey = byteToIntArray(secretKey);
+        cipher.decryption(intValue, intSecretKey);
+        byte[] decryptedValue = intToByteArray(intValue);
+        return new String(decryptedValue);
 	}
 	
 	public PrivateKey getPrivateKey() {

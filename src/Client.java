@@ -33,9 +33,7 @@ public class Client {
             System.out.println("Connecting to Computer: " + hostname + " On port: " + port);
             Socket clientSocket = new Socket(hostname, port);
             System.out.println("Connection Successful!");
-            //PrintWriter writeToServer = new PrintWriter(clientSocket.getOutputStream(), true);
-            //BufferedReader readFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            //BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+
             ObjectOutputStream writeToServer = new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream readFromServer = new ObjectInputStream(clientSocket.getInputStream());
             if (readInput == null) {

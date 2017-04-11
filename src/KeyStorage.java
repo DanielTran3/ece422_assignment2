@@ -40,12 +40,6 @@ public class KeyStorage {
 		this.pubKey = this.pairKey.getPublic();
 	}
 
-//	public int[] byteToIntArray(byte byteKey[]) {
-//		IntBuffer intBuf = ByteBuffer.wrap(byteKey).order(ByteOrder.LITTLE_ENDIAN).asIntBuffer();
-//		int[] tempArray = new int[intBuf.remaining()];
-//		return intBuf.get(tempArray);
-//	}
-
 	public int[] byteToIntArray(byte[] input)
 	{
 	    int[] ret = new int[input.length];
@@ -56,16 +50,6 @@ public class KeyStorage {
 	    return ret;
 	}
 
-//	public int[] byteToIntArray(byte buf[]) {
-//		int intArr[] = new int[buf.length / 4];
-//		int offset = 0;
-//		for(int i = 0; i < intArr.length; i++) {
-//			intArr[i] = (buf[3 + offset] & 0xFF) | ((buf[2 + offset] & 0xFF) << 8) |
-//	              ((buf[1 + offset] & 0xFF) << 16) | ((buf[0 + offset] & 0xFF) << 24);
-//			offset += 4;
-//			}
-//		return intArr;
-//	}
 	public byte[] intToByteArray(int[] encIntArray) {
 		ByteBuffer byteBuf = ByteBuffer.allocate(encIntArray.length * 4);
 		IntBuffer intBuf = byteBuf.asIntBuffer();
@@ -76,9 +60,7 @@ public class KeyStorage {
 	public int[] encrypt_message(byte[] value) {
         int[] intValue = byteToIntArray(value);
         int[] intSecretKey = byteToIntArray(secretKey);
-		System.out.println("Encrypt Before: " + Arrays.toString(intValue));
         cipher.encryption(intValue, intSecretKey);
-		System.out.println("Encrypt After: " + Arrays.toString(intValue));
         return intValue;
 	}
 
@@ -88,9 +70,7 @@ public class KeyStorage {
 
 	public byte[] decrypt_message(int[] value) {
         int[] intSecretKey = byteToIntArray(secretKey);
-		System.out.println("Decrypt Before: " + Arrays.toString(value));
         cipher.decryption(value, intSecretKey);
-		System.out.println("Decrypt After: " + Arrays.toString(value));
         return intToByteArray(value);
 	}
 

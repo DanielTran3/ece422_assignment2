@@ -32,8 +32,6 @@ public class ServerThread extends Thread {
 	public void run() {
         System.out.println("Server Connected to Client!");
 		try {
-			//PrintWriter writeToClient = new PrintWriter(this.serverSocket.getOutputStream(), true);
-            //BufferedReader readFromClient = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 			ObjectOutputStream writeToClient = new ObjectOutputStream(serverSocket.getOutputStream());
             ObjectInputStream readFromClient = new ObjectInputStream(serverSocket.getInputStream());
 
@@ -63,7 +61,6 @@ public class ServerThread extends Thread {
 			byte[] test_filename;
 			byte[] fileReadIn;
 			// Fix while loop
-//			while(serverSocket.isClosed()) {
 			while(true) {
 				System.out.println("waiting");
 				int_filename = (int[]) readFromClient.readObject();

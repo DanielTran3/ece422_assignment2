@@ -7,8 +7,9 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 
+// Stores keys and performs encryption/decryption of messages
 public class KeyStorage {
-
+	// Store all of the keys
 	private KeyPairGenerator keyGenDH;
 	private KeyPair pairKey;
 	private PrivateKey privKey;
@@ -30,12 +31,14 @@ public class KeyStorage {
 		}
 	}
 
+	// Generate the public and private keys and store them
 	public void generateKeys() {
 		this.pairKey = this.keyGenDH.generateKeyPair();
 		this.privKey = this.pairKey.getPrivate();
 		this.pubKey = this.pairKey.getPublic();
 	}
 
+	// Convert a byte[] into an int[]
 	public int[] byteToIntArray(byte[] input)
 	{
 	    int[] ret = new int[input.length];
@@ -46,6 +49,7 @@ public class KeyStorage {
 	    return ret;
 	}
 
+	// Convert an int[] into a byte[]
 	public byte[] intToByteArray(int[] encIntArray) {
 		ByteBuffer byteBuf = ByteBuffer.allocate(encIntArray.length * 4);
 		IntBuffer intBuf = byteBuf.asIntBuffer();
@@ -53,6 +57,7 @@ public class KeyStorage {
 		return byteBuf.array();
 	}
 
+	// Encrypt a message, returning it as an int[]
 	public int[] encrypt_message(byte[] value) {
         int[] intValue = byteToIntArray(value);
         int[] intSecretKey = byteToIntArray(secretKey);
@@ -60,17 +65,20 @@ public class KeyStorage {
         return intValue;
 	}
 
-	public String decrypt_message_String(int[] value) {
-		String nullMessage = new String(decrypt_message(value));
-        return nullMessage.replaceAll("\0", "");
-	}
-
+	// Decrypt a message, returning it as an byte[]
 	public byte[] decrypt_message(int[] value) {
         int[] intSecretKey = byteToIntArray(secretKey);
         cipher.decryption(value, intSecretKey);
         return intToByteArray(value);
 	}
 
+	// Decrypt a message, returning it as a String
+	public String decrypt_message_String(int[] value) {
+		String nullMessage = new String(decrypt_message(value));
+        return nullMessage.replaceAll("\0", "");
+	}
+
+	// Getters and setters for some of the keys
 	public PrivateKey getPrivateKey() {
 		return this.privKey;
 	}

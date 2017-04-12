@@ -29,7 +29,6 @@ public class Hashing {
 	public byte[] generateSalt() {
 		byte[] saltBytes = new byte[16];
 		random.nextBytes(saltBytes);
-		System.out.println("Salt: " + Arrays.toString(saltBytes));
 		return saltBytes;
 	}
 

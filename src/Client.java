@@ -92,7 +92,7 @@ public class Client {
 	            String file_request;
 	            String ack;
 				byte[] readFile;	
-				byte[] clearedReadFile;
+				byte[] cleanedReadFile;
 
 	            while(true) {
 					// Read in filename that we want from the server
@@ -124,14 +124,14 @@ public class Client {
 	                	System.out.println("File Found! Displaying...");
 	                	readFile = clientKeys.decrypt_message((int[]) readFromServer.readObject());
 						// Clear padding bytes from the byte to int conversion						
-						clearedReadFile = new byte[readFile.length/4];						
-						for (int i = 0; i < clearedReadFile.length; i++) {
-							clearedReadFile[i] = readFile[(i*4) + 3];
+						cleanedReadFile = new byte[readFile.length/4];						
+						for (int i = 0; i < cleanedReadFile.length; i++) {
+							cleanedReadFile[i] = readFile[(i*4) + 3];
 						}
 	                	System.out.println("________________________________________________________________");
-						System.out.println("File: " + new String(clearedReadFile));
+						System.out.println("File: " + new String(cleanedReadFile));
 						System.out.println("________________________________________________________________");
-						fileIO.saveToFile(directory, file_request, clearedReadFile);
+						fileIO.saveToFile(directory, file_request, cleanedReadFile);
 	                }
 	            }
             }

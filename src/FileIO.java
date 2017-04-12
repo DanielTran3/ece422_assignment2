@@ -77,15 +77,14 @@ public class FileIO {
 		return file.exists();
 	}
 	
-	public void saveToFile(String path, String filename, byte[] file) {
+	public void saveToFile(String path, String filename, String file) {
 		
 		try {
 			String fullPath = path + '/' + filename;
-			FileOutputStream saveToFile = new FileOutputStream(fullPath);
+			PrintWriter saveToFile = new PrintWriter(fullPath);
 			saveToFile.write(file);
 			saveToFile.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

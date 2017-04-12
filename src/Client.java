@@ -24,7 +24,6 @@ public class Client {
 	private static final String fileFound = "FILE FOUND";
 	private static final String ACCESS_DENIED = "Access-Denied";
 	private static final String ACCESS_GRANTED = "Access-Granted";
-	private static final String DIRECTORY = System.getProperty("user.dir") + '/' + "ClientDownloads"; 
 
     public static void main (String args[]) {
 
@@ -76,8 +75,9 @@ public class Client {
             }
             else {
             	System.out.println(ACCESS_GRANTED);
-            	if (Files.notExists(Paths.get(DIRECTORY), LinkOption.NOFOLLOW_LINKS)) {
-            		File dir = new File(DIRECTORY);
+				String directory = System.getProperty("user.dir") + '/' + username + "_Downloads"; 
+            	if (Files.notExists(Paths.get(directory), LinkOption.NOFOLLOW_LINKS)) {
+            		File dir = new File(directory);
             		dir.mkdir();
             	}
 	            String file_request = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
@@ -104,11 +104,11 @@ public class Client {
 	                }
 	                if (ack.equals(fileFound)) {
 	                	System.out.println("File Found! Displaying...");
-	                	byte[] byte_readFile = clientKeys.decrypt_message((int[]) readFromServer.readObject());
+	                	String readFile = clientKeys.decrypt_message_String((int[]) readFromServer.readObject());
 	                	System.out.println("________________________________________________________________");
-						System.out.println("File: " + new String(byte_readFile));
+						System.out.println("File: " + readFile);
 						System.out.println("________________________________________________________________");
-						fileIO.saveToFile(DIRECTORY, file_request, byte_readFile);
+						fileIO.saveToFile(directory, file_request, readFile);
 	                }
 					file_request = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
 	            }

@@ -32,21 +32,6 @@ public class FileIO {
 		}
 	}
 
-	public void bulkWriteShadowFile(String filename, List<String> list_of_passwords) {
-		try {
-			PrintWriter writer = new PrintWriter(filename);
-
-			for (String value : list_of_passwords) {
-				writer.println(value);
-			}
-			writer.close();
-		}
-		catch(IOException e) {
-			System.out.println("Couldn't write to File!");
-			e.printStackTrace();
-		}
-	}
-
 	public void writeShadowFile(String filename, String salt, String username, String password) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true));

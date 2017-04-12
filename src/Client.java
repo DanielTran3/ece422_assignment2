@@ -113,7 +113,6 @@ public class Client {
 					// If the file doesn't exist, then re-prompt user for new file
 					if (ack.equals(fileNotFound)) {
 	                	System.out.println(ack);
-						file_request = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
 	                	continue;
 	                }
 

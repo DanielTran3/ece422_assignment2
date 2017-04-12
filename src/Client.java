@@ -11,6 +11,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import javax.crypto.KeyAgreement;
+import java.util.Arrays;
 
 public class Client {
 	private static KeyStorage clientKeys;
@@ -90,7 +91,8 @@ public class Client {
 				// Extra required variables
 	            String file_request;
 	            String ack;
-				String readFile;
+				byte[] readFile;	
+				byte[] clearedReadFile;
 
 	            while(true) {
 					// Read in filename that we want from the server
@@ -120,11 +122,16 @@ public class Client {
 					// and save into directory
 	                if (ack.equals(fileFound)) {
 	                	System.out.println("File Found! Displaying...");
-	                	readFile = clientKeys.decrypt_message_String((int[]) readFromServer.readObject());
+	                	readFile = clientKeys.decrypt_message((int[]) readFromServer.readObject());
+						// Clear padding bytes from the byte to int conversion						
+						clearedReadFile = new byte[readFile.length/4];						
+						for (int i = 0; i < clearedReadFile.length; i++) {
+							clearedReadFile[i] = readFile[(i*4) + 3];
+						}
 	                	System.out.println("________________________________________________________________");
-						System.out.println("File: " + readFile);
+						System.out.println("File: " + new String(clearedReadFile));
 						System.out.println("________________________________________________________________");
-						fileIO.saveToFile(directory, file_request, readFile);
+						fileIO.saveToFile(directory, file_request, clearedReadFile);
 	                }
 	            }
             }

@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 import java.util.List;
+import java.io.FileOutputStream;
 
 public class FileIO {
 
@@ -67,10 +68,10 @@ public class FileIO {
     }
 
     // Save a file to the specified directory with specified name
-	public void saveToFile(String path, String filename, String file) {
+	public void saveToFile(String path, String filename, byte[] file) {
 		try {
 			String fullPath = path + '/' + filename;
-			PrintWriter saveToFile = new PrintWriter(fullPath);
+			FileOutputStream saveToFile = new FileOutputStream(fullPath);
 			saveToFile.write(file);
 			saveToFile.close();
 		} catch (IOException e) {

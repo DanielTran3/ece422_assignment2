@@ -8,6 +8,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.nio.file.Files;
 import javax.crypto.KeyAgreement;
+import java.io.FileInputStream;
+import java.io.BufferedInputStream;
+import java.util.Arrays;
 
 public class ServerThread extends Thread {
 	private Socket serverSocket;
@@ -73,6 +76,9 @@ public class ServerThread extends Thread {
 				String clientFilename;
 				int[] int_filename;
 				byte[] fileReadIn;
+				byte [] mybytearray;
+				FileInputStream fis;
+				BufferedInputStream bis;
 				while(true) {
 					// Read the client's file input and decrypt is as a string
 					System.out.println("Waiting for Client Input...");

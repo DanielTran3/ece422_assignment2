@@ -1,16 +1,18 @@
 import java.io.File;
+import java.util.Arrays;
 
 class Test {
 	public static void main(String[] args) {
-
-		String directory = System.getProperty("user.dir");
-		System.out.println(directory);
-		System.out.println(args[0]);
-		File file = new File(args[0]);
-		System.out.println(file.getPath());
-		System.out.println(file.exists());
-		file = new File(directory + '/' + args[0]);
-		System.out.println(file.getPath());		
-		System.out.println(file.exists());
+		KeyStorage a = new KeyStorage();
+		String b = "Hello";
+		System.out.println(Arrays.toString(b.getBytes()));
+		int[] c = a.byteToIntArray(b.getBytes());
+		System.out.println(Arrays.toString(c));
+		byte[] d = a.intToByteArray(c);
+		System.out.println(Arrays.toString(d));
+		String e = new String(d).replaceAll("\0", "");
+		byte[] f = e.getBytes();
+		System.out.println(Arrays.toString(f));
+		System.out.println(e.equals(b));
 	}
 }

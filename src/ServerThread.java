@@ -53,7 +53,7 @@ public class ServerThread extends Thread {
 			ka.init(serverKeys.getPrivateKey());
 			ka.doPhase(clientPubKey, true);
 			serverKeys.setSecretKey(ka.generateSecret());
-			System.out.println("Secret Key: " + Arrays.toString(serverKeys.getSecretKey()));
+			//System.out.println("Secret Key: " + Arrays.toString(serverKeys.getSecretKey()));
 
 			String username;
 			String password;
@@ -65,8 +65,12 @@ public class ServerThread extends Thread {
 				writeToClient.writeObject(serverKeys.encrypt_message(ACCESS_DENIED.getBytes()));
 			}
 			byte[] hashedPassword = hashing.sha256Hash(Server.getSalt(usernameIndex), password);
-			
-			if (hashing.hashToHex(hashedPassword) != Server.getPassword(usernameIndex)) {
+			String test = hashing.hashToHex(hashedPassword);
+			if (test.equals(Server.getPassword(usernameIndex))) {
+				System.out.println("test: " + test);
+				System.out.println("test length: " + test.length());
+				System.out.println("real: " + Server.getPassword(usernameIndex));
+				System.out.println("real length: " + Server.getPassword(usernameIndex).length());
 				writeToClient.writeObject(serverKeys.encrypt_message(ACCESS_DENIED.getBytes()));
 			}
 			else {
@@ -82,7 +86,6 @@ public class ServerThread extends Thread {
 	            	clientFilename = serverKeys.decrypt_message_String(int_filename);			
 	
 	            	if (clientFilename.equals("finished")) {
-						System.out.println("Session with Client " + Thread.currentThread().getId() + " has Ended...");
 	        			break;
 	            	}
 	
@@ -112,6 +115,7 @@ public class ServerThread extends Thread {
 	            	}
 				}
 			}
+			System.out.println("Session with Client " + Thread.currentThread().getId() + " has Ended...");
 			readFromClient.close();
 			writeToClient.close();
 			this.serverSocket.close();

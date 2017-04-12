@@ -35,7 +35,6 @@ public class Hashing {
 		for (int i = 0; i < hashedText.length; i++) {
 			hexHash.append(Integer.toHexString(0xFF & hashedText[i]));
 		}
-		System.out.println("Hexed: " + hexHash.toString());
 		return hexHash.toString();
 	}
 

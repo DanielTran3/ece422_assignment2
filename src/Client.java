@@ -56,7 +56,7 @@ public class Client {
 			ka.init(clientKeys.getPrivateKey());
 			ka.doPhase(serverPubKey, true);
 			clientKeys.setSecretKey(ka.generateSecret());
-			System.out.println("Secret Key: " + Arrays.toString(clientKeys.getSecretKey()));
+			//System.out.println("Secret Key: " + Arrays.toString(clientKeys.getSecretKey()));
 			
 			writeToServer.writeObject(clientKeys.encrypt_message(username.getBytes()));
             writeToServer.flush();

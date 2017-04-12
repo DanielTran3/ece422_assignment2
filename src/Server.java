@@ -12,16 +12,41 @@ public class Server {
 	private static List<String> saltList;
 	private static FileIO shadowFileIO;
 
+	public static int getUsernameIndex(String user) {
+		for (int i = 0; i < listLength(); i++) {
+			if (user.equals(usernameList.get(i))) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public static String getPassword(int index) {
+		return passwordList.get(index);
+	}
+	
+	public static String getSalt(int index) {
+		return saltList.get(index);
+	}
+	
 	public List<String> getPasswordList() {
 		return passwordList;
 	}
 
-	public boolean inShadowFile(String encryptedPassword) {
-		return passwordList.contains(encryptedPassword);
+	public static List<String> getUsernameList() {
+		return usernameList;
 	}
-
+	
+	public List<String> getSaltList() {
+		return saltList;
+	}
+	
 	public static String getShadowFile() {
 		return shadowFile;
+	}
+	
+	public static int listLength() {
+		return passwordList.size();
 	}
 	
 	public static void main (String args[]) {

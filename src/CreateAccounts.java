@@ -1,19 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.Console;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.util.Arrays;
-import java.nio.file.Files;
-import javax.crypto.KeyAgreement;
 
 public class CreateAccounts extends Thread {
 
@@ -24,6 +9,7 @@ public class CreateAccounts extends Thread {
 			System.out.println("Please Enter Only Two Inputs: shadowfile");
 			System.exit(0);
 		}  
+		
 		System.out.println("Adding Accounts to the Shadow File!");
 		System.out.println("Currently in folder: " + directory);
         Console readInput = System.console();

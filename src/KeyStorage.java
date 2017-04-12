@@ -1,15 +1,11 @@
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.IntBuffer;
-import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.*;
 
 public class KeyStorage {
 
@@ -30,7 +26,6 @@ public class KeyStorage {
 			this.secretKey = null;
 			this.cipher = new TEA();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -76,29 +71,12 @@ public class KeyStorage {
         return intToByteArray(value);
 	}
 
-	public String encrypt_message_String(int[] value) {
-		String enc_message = new String(intToByteArray(value));
-        return enc_message.replaceAll("\0", "");
-	}
-
 	public PrivateKey getPrivateKey() {
 		return this.privKey;
 	}
 
 	public PublicKey getPublicKey() {
 		return this.pubKey;
-	}
-
-	public void setPrivateKey(PrivateKey priv) {
-		this.privKey = priv;
-	}
-
-	public void setPublicKey(PublicKey pub) {
-		this.pubKey = pub;
-	}
-
-	public byte[] getSecretKey() {
-		return this.secretKey;
 	}
 
 	public void setSecretKey(byte[] sk) {

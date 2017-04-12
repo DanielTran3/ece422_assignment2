@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -28,23 +27,7 @@ public class Server {
 	public static String getSalt(int index) {
 		return saltList.get(index);
 	}
-	
-	public List<String> getPasswordList() {
-		return passwordList;
-	}
 
-	public static List<String> getUsernameList() {
-		return usernameList;
-	}
-	
-	public List<String> getSaltList() {
-		return saltList;
-	}
-	
-	public static String getShadowFile() {
-		return shadowFile;
-	}
-	
 	public static int listLength() {
 		return passwordList.size();
 	}
@@ -65,11 +48,6 @@ public class Server {
 			
 			shadowFileIO = new FileIO();
 			shadowFileIO.loadShadowFile(shadowFile, usernameList, saltList, passwordList);
-			for(int i = 0; i < passwordList.size(); i++) {
-				System.out.println("Username: " + usernameList.get(i));
-				System.out.println("Password: " + passwordList.get(i));
-				System.out.println("Salt: " + saltList.get(i));
-			}
 
             while (true) {
                 // Create new thread for the client

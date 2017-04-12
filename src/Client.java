@@ -1,12 +1,8 @@
-import java.io.BufferedReader;
 import java.io.Console;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -14,7 +10,6 @@ import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.util.Arrays;
 
 import javax.crypto.KeyAgreement;
 public class Client {
@@ -31,9 +26,9 @@ public class Client {
 			System.out.println("Please Enter Only Two Inputs: Portnumber Hostname");
 			System.exit(0);
 		}
+        
         int port = Integer.parseInt(args[0]);
         String hostname = args[1];
-
         Console readInput = System.console();
 
         try {
@@ -44,6 +39,7 @@ public class Client {
             ObjectOutputStream writeToServer = new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream readFromServer = new ObjectInputStream(clientSocket.getInputStream());
             FileIO fileIO = new FileIO();
+            
             if (readInput == null) {
     			System.out.println("Error in reading from console.");
     			System.exit(0);
@@ -62,7 +58,6 @@ public class Client {
 			ka.init(clientKeys.getPrivateKey());
 			ka.doPhase(serverPubKey, true);
 			clientKeys.setSecretKey(ka.generateSecret());
-			//System.out.println("Secret Key: " + Arrays.toString(clientKeys.getSecretKey()));
 			
 			writeToServer.writeObject(clientKeys.encrypt_message(username.getBytes()));
             writeToServer.flush();
@@ -76,14 +71,16 @@ public class Client {
             else {
             	System.out.println(ACCESS_GRANTED);
 				String directory = System.getProperty("user.dir") + '/' + username + "_Downloads"; 
-            	if (Files.notExists(Paths.get(directory), LinkOption.NOFOLLOW_LINKS)) {
+            	
+				if (Files.notExists(Paths.get(directory), LinkOption.NOFOLLOW_LINKS)) {
             		File dir = new File(directory);
             		dir.mkdir();
             	}
+            	
 	            String file_request = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
 	            String ack;
 	            int[] intFromServer;
-	            byte[] fileFromServer;
+	            
 	            while(true) {
 					if (file_request.equals("exit")) {
 						System.out.println("Ending Session...");

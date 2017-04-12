@@ -1,11 +1,16 @@
 import java.io.BufferedReader;
 import java.io.Console;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -19,6 +24,7 @@ public class Client {
 	private static final String fileFound = "FILE FOUND";
 	private static final String ACCESS_DENIED = "Access-Denied";
 	private static final String ACCESS_GRANTED = "Access-Granted";
+	private static final String DIRECTORY = System.getProperty("user.dir") + '/' + "ClientDownloads"; 
 
     public static void main (String args[]) {
 
@@ -38,6 +44,7 @@ public class Client {
 
             ObjectOutputStream writeToServer = new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream readFromServer = new ObjectInputStream(clientSocket.getInputStream());
+            FileIO fileIO = new FileIO();
             if (readInput == null) {
     			System.out.println("Error in reading from console.");
     			System.exit(0);
@@ -69,6 +76,10 @@ public class Client {
             }
             else {
             	System.out.println(ACCESS_GRANTED);
+            	if (Files.notExists(Paths.get(DIRECTORY), LinkOption.NOFOLLOW_LINKS)) {
+            		File dir = new File(DIRECTORY);
+            		dir.mkdir();
+            	}
 	            String file_request = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
 	            String ack;
 	            int[] intFromServer;
@@ -93,11 +104,12 @@ public class Client {
 	                }
 	                if (ack.equals(fileFound)) {
 	                	System.out.println("File Found! Displaying...");
+	                	byte[] byte_readFile = clientKeys.decrypt_message((int[]) readFromServer.readObject());
 	                	System.out.println("________________________________________________________________");
-						String readFile = clientKeys.decrypt_message_String((int[]) readFromServer.readObject());
-						System.out.println("File: " + readFile);
+						System.out.println("File: " + new String(byte_readFile));
 						System.out.println("________________________________________________________________");
-					}
+						fileIO.saveToFile(DIRECTORY, file_request, byte_readFile);
+	                }
 					file_request = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
 	            }
             }

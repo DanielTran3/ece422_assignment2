@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -74,6 +75,19 @@ public class FileIO {
 		File file = new File(filename);
 		System.out.println(filename.length());
 		return file.exists();
+	}
+	
+	public void saveToFile(String path, String filename, byte[] file) {
+		
+		try {
+			String fullPath = path + '/' + filename;
+			FileOutputStream saveToFile = new FileOutputStream(fullPath);
+			saveToFile.write(file);
+			saveToFile.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

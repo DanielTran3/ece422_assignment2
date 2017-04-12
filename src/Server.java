@@ -73,8 +73,8 @@ public class Server {
 
             while (true) {
                 // Create new thread for the client
-                //new ServerThread(serverSocket.accept()).start();
-            	new CreateAccountThread(serverSocket.accept()).start();
+                new ServerThread(serverSocket.accept()).start();
+            	//new CreateAccountThread(serverSocket.accept()).start();
 			}
         }
         catch (IOException e) {

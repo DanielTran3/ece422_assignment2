@@ -66,7 +66,7 @@ public class ServerThread extends Thread {
 			}
 			byte[] hashedPassword = hashing.sha256Hash(Server.getSalt(usernameIndex), password);
 			String test = hashing.hashToHex(hashedPassword);
-			if (test.equals(Server.getPassword(usernameIndex))) {
+			if (!test.equals(Server.getPassword(usernameIndex))) {
 				System.out.println("test: " + test);
 				System.out.println("test length: " + test.length());
 				System.out.println("real: " + Server.getPassword(usernameIndex));

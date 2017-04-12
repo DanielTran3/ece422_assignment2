@@ -1,8 +1,10 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,14 +19,17 @@ import java.util.List;
 public class FileIO {
 
     public FileIO() { }
-	public List<String> readShadowFile(String filename) {
-		List<String> password_list = new ArrayList<>();
+	public void loadShadowFile(String filename, List<String> userList, List<String> saltList, List<String> passList) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filename));
 			String line = br.readLine();
 
 			while (line != null) {
-				password_list.add(line);
+				String[] userSaltPass = line.split("\t");
+				String[] saltPass = userSaltPass[1].split("\\$");			
+				userList.add(userSaltPass[0]);
+				saltList.add(saltPass[0]);
+				passList.add(saltPass[1]);
 				line = br.readLine();
 			}
 			br.close();
@@ -34,8 +39,6 @@ public class FileIO {
 			System.out.println("Could not read data!");
 			e.printStackTrace();
 		}
-
-		return password_list;
 	}
 
 	public void bulkWriteShadowFile(String filename, List<String> list_of_passwords) {
@@ -55,8 +58,10 @@ public class FileIO {
 
 	public void writeShadowFile(String filename, String salt, String username, String password) {
 		try {
-			PrintWriter writer = new PrintWriter(filename);
-			writer.println(username + '\t' + salt + "$" + password);
+			BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true));
+			writer.write(username + '\t' + salt + "$" + password);
+			writer.newLine();
+			writer.flush();
 			writer.close();
 		}
 		catch(IOException e) {

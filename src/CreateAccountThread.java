@@ -29,6 +29,7 @@ public class CreateAccountThread extends Thread {
 	public CreateAccountThread(Socket accept) {
 		this.serverSocket = accept;
 		fileIO = new FileIO();
+		hashing = new Hashing();
 	}
 
 	public void run() {
@@ -54,18 +55,19 @@ public class CreateAccountThread extends Thread {
 			String username;
 			String password;
 			byte[] salt;
+			byte[] byte_password;
+			String saltString;
 			int count = 0;
-			while (count < 10) {
-				username = serverKeys.decrypt_message_String((int[]) readFromClient.readObject());
-				password = serverKeys.decrypt_message_String((int[]) readFromClient.readObject());
-				System.out.println("Decrypted Username: " + username);
-				System.out.println("Decrypted Password: " + username);
-				salt = hashing.generateSalt();
-				
-				password = hashing.sha256Hash(salt, password);
-				fileIO.writeShadowFile(Server.getShadowFile(), salt.toString(), username, password);
-				count++;
-			}
+			username = serverKeys.decrypt_message_String((int[]) readFromClient.readObject());
+			password = serverKeys.decrypt_message_String((int[]) readFromClient.readObject());
+			System.out.println("Decrypted Username: " + username);
+			System.out.println("Decrypted Password: " + password);
+			salt = hashing.generateSalt();
+			saltString = hashing.hashToHex(salt);
+			byte_password = hashing.sha256Hash(saltString, password);
+			password = hashing.hashToHex(byte_password);
+			fileIO.writeShadowFile(Server.getShadowFile(), saltString, username, password);
+			count++;
 
 			readFromClient.close();
 			writeToClient.close();

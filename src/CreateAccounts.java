@@ -17,15 +17,8 @@ import javax.crypto.KeyAgreement;
 
 public class CreateAccounts extends Thread {
 
-	private static FileIO fileIO;
-	private static Hashing hashing;
 	private static String directory = System.getProperty("user.dir");
 	
-	public CreateAccounts() {
-		fileIO = new FileIO();
-		hashing = new Hashing();
-	}
-
 	public static void main (String args[]) {
 		if (args.length != 1) {
 			System.out.println("Please Enter Only Two Inputs: shadowfile");
@@ -36,6 +29,9 @@ public class CreateAccounts extends Thread {
         Console readInput = System.console();
         String filename = args[0];
         String choice;
+		FileIO fileIO = new FileIO();
+		Hashing hashing = new Hashing();
+
         while(true) {
         	choice = readInput.readLine("Would you like to create an account? [y/n]: ");
         	if (choice.equals("n")) {

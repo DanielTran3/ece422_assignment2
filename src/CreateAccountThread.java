@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.nio.file.Files;
 import javax.crypto.KeyAgreement;
 
-public class CreateAccountThread extends Thread {
+public class CreateAccount extends Thread {
 
 	private String clientID;
 	private String clientPassword;
@@ -25,43 +25,28 @@ public class CreateAccountThread extends Thread {
 	private FileIO fileIO;
 	private Hashing hashing;
 	private String directory = System.getProperty("user.dir");
+	private byte[] salt;
+	private byte[] byte_password;
 
-	public CreateAccountThread(Socket accept) {
+	public CreateAccount(Socket accept) {
 		this.serverSocket = accept;
 		fileIO = new FileIO();
 		hashing = new Hashing();
 	}
 
-	public void run() {
-        System.out.println("Adding Accounts to the Shadow File!");
+	public static void main (String[] args) {
+		if (args.length != 3) {
+			System.out.println("Please Enter Only Two Inputs: shadowfile username password");
+			System.exit(0);
+		}        
+		System.out.println("Adding Accounts to the Shadow File!");
 		System.out.println("Currently in folder: " + directory);
 		try {
-			ObjectOutputStream writeToClient = new ObjectOutputStream(serverSocket.getOutputStream());
-            ObjectInputStream readFromClient = new ObjectInputStream(serverSocket.getInputStream());
-			
-			serverKeys = new KeyStorage();
-			serverKeys.generateKeys();
+			String filename = args[0];
+			String username = args[1];
+			String password = args[2];
 
-			PublicKey clientPubKey = (PublicKey) readFromClient.readObject();
-            writeToClient.writeObject(serverKeys.getPublicKey());
-            writeToClient.flush();
-
-            KeyAgreement ka = KeyAgreement.getInstance("DH");
-			ka.init(serverKeys.getPrivateKey());
-			ka.doPhase(clientPubKey, true);
-			serverKeys.setSecretKey(ka.generateSecret());
-			System.out.println("Secret Key: " + Arrays.toString(serverKeys.getSecretKey()));
-
-			String username;
-			String password;
-			byte[] salt;
-			byte[] byte_password;
 			String saltString;
-			int count = 0;
-			username = serverKeys.decrypt_message_String((int[]) readFromClient.readObject());
-			password = serverKeys.decrypt_message_String((int[]) readFromClient.readObject());
-			System.out.println("Decrypted Username: " + username);
-			System.out.println("Decrypted Password: " + password);
 			salt = hashing.generateSalt();
 			saltString = hashing.hashToHex(salt);
 			byte_password = hashing.sha256Hash(saltString, password);

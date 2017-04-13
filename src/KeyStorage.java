@@ -61,15 +61,31 @@ public class KeyStorage {
 	public int[] encrypt_message(byte[] value) {
         int[] intValue = byteToIntArray(value);
         int[] intSecretKey = byteToIntArray(secretKey);
-        cipher.encryption(intValue, intSecretKey);
-        return intValue;
+        int[] full_encrypt = new int[intValue.length];
+        int[] block = new int[2];
+        for (int i = 0; i < full_encrypt.length - 1; i++) {
+        	block[0] = intValue[i];
+        	block[1] = intValue[i + 1];
+        	cipher.encryption(block, intSecretKey);
+        	full_encrypt[i] = block[0];
+        	full_encrypt[i+1] = block[1];
+        }
+        return full_encrypt;
 	}
 
 	// Decrypt a message, returning it as an byte[]
 	public byte[] decrypt_message(int[] value) {
         int[] intSecretKey = byteToIntArray(secretKey);
-        cipher.decryption(value, intSecretKey);
-        return intToByteArray(value);
+        int[] full_decrypt = new int[value.length];
+        int[] block = new int[2];
+        for (int i = full_decrypt.length - 1; i > 0; i++) {
+        	block[0] = value[i - 1];
+        	block[1] = value[i];
+        	cipher.decryption(block, intSecretKey);
+        	full_decrypt[i-1] = block[0];
+        	full_decrypt[i] = block[1];
+        }
+        return intToByteArray(full_decrypt);
 	}
 
 	// Decrypt a message, returning it as a String

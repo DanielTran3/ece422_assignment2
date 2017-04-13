@@ -54,6 +54,7 @@ public class Client {
 			// Get username, password, and check their lengths
     		String username = readInput.readLine("Enter your Username: ");
     		String password = readInput.readLine("Enter your Password: ");
+<<<<<<< HEAD
 			while(username.length() < 2) {
 				System.out.println("Please enter a longer username (2+ characters)");
 				username = readInput.readLine("Enter your Username: ");
@@ -63,6 +64,16 @@ public class Client {
 				username = readInput.readLine("Enter your Password: ");
 			}
 
+=======
+    		while (username.length() < 2) {
+    			System.out.println("Please enter a longer username (2+ characters)");
+    			username = readInput.readLine("Enter your Username: ");
+    		}
+    		while (password.length() < 2) {
+    			System.out.println("Please enter a longer password (2+ characters)");
+    			password = readInput.readLine("Enter your Password: ");
+    		}
+>>>>>>> master
 			// Generate Public and Private Keys
             clientKeys = new KeyStorage();
             clientKeys.generateKeys();
@@ -105,11 +116,18 @@ public class Client {
 	            while(true) {
 					// Read in filename that we want from the server
 					file_request = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
+<<<<<<< HEAD
 					while(file_request.length() < 2) {
 						System.out.println("Please enter a longer filename (2+ characters)");
 						username = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
 					}
 
+=======
+					while (file_request.length() < 2) {
+		    			System.out.println("Please enter a longer filename (2+ characters)");
+		    			username = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
+		    		}
+>>>>>>> master
 					// If user typed "exit", then send encrypted "finished" message to server
 					if (file_request.equals("exit")) {
 						System.out.println("Ending Session...");

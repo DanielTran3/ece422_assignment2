@@ -25,6 +25,7 @@ JNIEXPORT void JNICALL Java_TEA_encryption
       printf("Cannot obtain array from JVM\n");
       exit(0);
     }
+<<<<<<< HEAD
 
     // Run the encryption
 	int i;
@@ -33,9 +34,12 @@ JNIEXPORT void JNICALL Java_TEA_encryption
 	}
     // Pass by reference of modified encryption to input array
     (*env)->SetIntArrayRegion(env, v, 0, len_v, v_copy);
+=======
+	encrypt(v_copy, k_copy);
+	(*env)->SetIntArrayRegion(env, v, 0, len_v, v_copy);
+>>>>>>> master
 }
 
-// Encrytion algorithm
 void encrypt(jint* v, jint* k) {
 	unsigned int y = v[0], z=v[1], sum = 0;
 	unsigned int delta = 0x9e3779b9, n=32;

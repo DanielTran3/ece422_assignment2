@@ -55,7 +55,7 @@ public class Client {
 			}
 			while(password.length() < 2) {
 				System.out.println("Please enter a longer password (2+ characters)");
-				username = readInput.readLine("Enter your Password: ");
+				password = readInput.readLine("Enter your Password: ");
 			}
 
 			// Generate Public and Private Keys

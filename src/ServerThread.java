@@ -28,8 +28,7 @@ public class ServerThread extends Thread {
 	}
 
 	public void run() {
-        System.out.println("Server Connected to Client!");
-		System.out.println("Thread Number: " + Thread.currentThread().getId());
+        System.out.println("Server Connected to Client" + (Thread.currentThread().getId() - 10) + "!");
 		System.out.println("Currently in folder: " + directory);
 		try {
 			// Streamers to read/write to the client
@@ -113,7 +112,7 @@ public class ServerThread extends Thread {
 				}
 			}
 			// Session with client ended, close all streams and sockets
-			System.out.println("Session with Client " + Thread.currentThread().getId() + " has Ended...");
+			System.out.println("Session with Client " + (Thread.currentThread().getId() - 10) + " has Ended...");
 			readFromClient.close();
 			writeToClient.close();
 			this.serverSocket.close();

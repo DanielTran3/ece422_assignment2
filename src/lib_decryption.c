@@ -26,9 +26,12 @@ JNIEXPORT void JNICALL Java_TEA_decryption
       exit(0);
     }
 
+	int i;
     // Run the decryption
-    decrypt(v_copy, k_copy);
-    // Pass by reference of modified encryption to input array
+	for (i = len_v-2; i >= 0; i--) {
+    	decrypt(v_copy + i, k_copy);
+	}    
+	// Pass by reference of modified encryption to input array
 	(*env)->SetIntArrayRegion(env, v, 0, len_v, v_copy);
 }
 

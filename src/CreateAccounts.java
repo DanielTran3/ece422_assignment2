@@ -29,6 +29,14 @@ public class CreateAccounts extends Thread {
 				// Get username and password as input
         		String username = readInput.readLine("Enter your Username: ");
     			String password = readInput.readLine("Enter your Password: ");
+				while(username.length() < 2) {
+					System.out.println("Please enter a longer username (2+ characters)");
+					username = readInput.readLine("Enter your Username: ");
+				}
+				while(password.length() < 2) {
+					System.out.println("Please enter a longer password (2+ characters)");
+					username = readInput.readLine("Enter your Password: ");
+				}
     			String saltString;
 				// Generate a salt and convert it to hex as a string
     			byte[] salt = hashing.generateSalt();

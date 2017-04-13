@@ -129,16 +129,15 @@ public class Client {
 					// If the file exists, read and decrypt file from server, print to terminal
 					// and save into directory
 	                if (ack.equals(fileFound)) {
-	                	System.out.println("File Found! Displaying...");
+	                	System.out.println("File Found! Downloading...");
 	                	readFile = clientKeys.decrypt_message((int[]) readFromServer.readObject());
 						// Clear padding bytes from the byte to int conversion						
 						cleanedReadFile = new byte[readFile.length/4];						
 						for (int i = 0; i < cleanedReadFile.length; i++) {
 							cleanedReadFile[i] = readFile[(i*4) + 3];
 						}
-	                	System.out.println("________________________________________________________________");
-						System.out.println("File: " + new String(cleanedReadFile));
-						System.out.println("________________________________________________________________");
+
+	                	System.out.println("Download Complete!");	                	
 						fileIO.saveToFile(directory, file_request, cleanedReadFile);
 	                }
 	            }

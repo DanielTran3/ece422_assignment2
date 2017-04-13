@@ -52,9 +52,9 @@ ask the user for a filename if the message was Access-Granted. The user takes in
 encrypts the message, and sends it to the server. The server decrypts the filename and checks if there is a
 file with that name. If there is not file, it sends a FILE NOT FOUND message to the user. If there is a file
 with that name, then the server will encrypt the file and send it to the user. The user will receive and
-decrypt the file, create their own folder (if it does not exist), then print out and store the file into
-their folder. This continues until the client enters exit into the terminal, in which the Server will
-receive a "finished" message and close any open streams and its socket. The client will also close its socket.
+decrypt the file, create their own folder (if it does not exist), then store the file into their folder. This
+continues until the client enters exit into the terminal, in which the Server will receive a "finished" 
+message and close any open streams and its socket. The client will also close its socket.
 
 The Hashing class contains some functions to perform SHA-256 hashing on a salt and password, generate a salt,
 and convert a hashed output into hex format to store into the shadow file. SHA-256 hashing algorithm was
@@ -76,8 +76,5 @@ Note that in this program, the user is restricted to inputting a minimum of 2 ch
 system where the user is prompted for an input. As well, the sequencing diagrams may not show the exact
 inputs to functions that may be seen in the code, because the complete input would require too much space on
 the diagram. As well, if statement checks are denoted by the objects call to itself, where the message
-displayed to its side shows the output of the if statement (or check). Also note that the client displays
-the contents of the message to the console. This is more intended for seeing the output of text-formatted files,
-as images and other files will output gibberish to the console. The files are still downloaded to the clients
-folder.
+displayed to its side shows the output of the if statement (or check).
 

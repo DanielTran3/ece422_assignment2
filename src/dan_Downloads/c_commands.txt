@@ -1,0 +1,6 @@
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD
+ - Run on all terminals open
+
+gcc -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -shared -fpic -o libdecryption.so lib_decryption.c
+
+gcc -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -shared -fpic -o libencryption.so lib_encryption.c

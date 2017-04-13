@@ -60,58 +60,60 @@ public class ServerThread extends Thread {
 				writeToClient.writeObject(serverKeys.encrypt_message(ACCESS_DENIED.getBytes()));
 			}
 
-			// Hash the user's password with the salt and check if the result is equivalent
-			// to the password hash stored in the shadow file
-			byte[] hashedPassword = hashing.sha256Hash(Server.getSalt(usernameIndex), password);
-			if (!hashing.hashToHex(hashedPassword).equals(Server.getPassword(usernameIndex))) {
-				// Send an ACCESS_DENIED message to the client because passwords didn't match
-				writeToClient.writeObject(serverKeys.encrypt_message(ACCESS_DENIED.getBytes()));
-			}
 			else {
-				// Send an ACCESS_GRANTED message to the client because username and password matched
-				writeToClient.writeObject(serverKeys.encrypt_message(ACCESS_GRANTED.getBytes()));
+				// Hash the user's password with the salt and check if the result is equivalent
+				// to the password hash stored in the shadow file
+				byte[] hashedPassword = hashing.sha256Hash(Server.getSalt(usernameIndex), password);
+				if (!hashing.hashToHex(hashedPassword).equals(Server.getPassword(usernameIndex))) {
+					// Send an ACCESS_DENIED message to the client because passwords didn't match
+					writeToClient.writeObject(serverKeys.encrypt_message(ACCESS_DENIED.getBytes()));
+				}
+				else {
+					// Send an ACCESS_GRANTED message to the client because username and password matched
+					writeToClient.writeObject(serverKeys.encrypt_message(ACCESS_GRANTED.getBytes()));
 
-				String clientFilename;
-				int[] int_filename;
-				byte[] fileReadIn;
-				byte [] mybytearray;
-				FileInputStream fis;
-				BufferedInputStream bis;
-				while(true) {
-					// Read the client's file input and decrypt is as a string
-					System.out.println("Waiting for Client Input...");
-					int_filename = (int[]) readFromClient.readObject();
-	            	clientFilename = serverKeys.decrypt_message_String(int_filename);
+					String clientFilename;
+					int[] int_filename;
+					byte[] fileReadIn;
+					byte [] mybytearray;
+					FileInputStream fis;
+					BufferedInputStream bis;
+					while(true) {
+						// Read the client's file input and decrypt is as a string
+						System.out.println("Waiting for Client" + (Thread.currentThread().getId() - 10) + " Input...");
+						int_filename = (int[]) readFromClient.readObject();
+			        	clientFilename = serverKeys.decrypt_message_String(int_filename);
 
-					// If the client sent "finished", then end the connection
-	            	if (clientFilename.equals("finished")) {
-	        			break;
-	            	}
+						// If the client sent "finished", then end the connection
+			        	if (clientFilename.equals("finished")) {
+			    			break;
+			        	}
 
-					System.out.println("Looking for Client File: " + clientFilename);
-					// Check if the client's file exists
-	            	File file = new File(clientFilename);
-	            	if(file.exists() && !file.isDirectory()) {
-						System.out.println("Sending File...");
-	            		// Send acknowledgement
-	            	    writeToClient.writeObject(serverKeys.encrypt_message(fileFound.getBytes()));
-						writeToClient.flush();
-	            	    // Read in File
-	            	    fileReadIn = Files.readAllBytes(file.toPath());
-	            	    // Write encrypted file to client
-	            	    writeToClient.writeObject(serverKeys.encrypt_message(fileReadIn));
-						writeToClient.flush();
+						System.out.println("Looking for Client" + (Thread.currentThread().getId() - 10) + " File: " + clientFilename);
+						// Check if the client's file exists
+			        	File file = new File(clientFilename);
+			        	if(file.exists() && !file.isDirectory()) {
+							System.out.println("Sending File...");
+			        		// Send acknowledgement
+			        	    writeToClient.writeObject(serverKeys.encrypt_message(fileFound.getBytes()));
+							writeToClient.flush();
+			        	    // Read in File
+			        	    fileReadIn = Files.readAllBytes(file.toPath());
+			        	    // Write encrypted file to client
+			        	    writeToClient.writeObject(serverKeys.encrypt_message(fileReadIn));
+							writeToClient.flush();
+						}
+			        	else {
+							// Client's file doesn't exist, send encrypted filesNotFound message
+							System.out.println("Failed to find file...");
+							writeToClient.writeObject(serverKeys.encrypt_message(fileNotFound.getBytes()));
+							writeToClient.flush();
+			        	}
 					}
-	            	else {
-						// Client's file doesn't exist, send encrypted filesNotFound message
-						System.out.println("Failed to find file...");
-						writeToClient.writeObject(serverKeys.encrypt_message(fileNotFound.getBytes()));
-						writeToClient.flush();
-	            	}
 				}
 			}
 			// Session with client ended, close all streams and sockets
-			System.out.println("Session with Client " + (Thread.currentThread().getId() - 10) + " has Ended...");
+			System.out.println("Session with Client" + (Thread.currentThread().getId() - 10) + " has Ended...");
 			readFromClient.close();
 			writeToClient.close();
 			this.serverSocket.close();

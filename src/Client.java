@@ -102,7 +102,7 @@ public class Client {
 					file_request = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
 					while(file_request.length() < 2) {
 						System.out.println("Please enter a longer filename (2+ characters)");
-						username = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
+						file_request = readInput.readLine("Enter Filename or type \"exit\" to exit: ");
 					}
 
 					// If user typed "exit", then send encrypted "finished" message to server

@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import javax.crypto.KeyAgreement;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
-import java.util.Arrays;
 
 public class ServerThread extends Thread {
 	private Socket serverSocket;

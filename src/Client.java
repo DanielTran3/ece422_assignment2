@@ -1,17 +1,12 @@
 import java.io.Console;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import javax.crypto.KeyAgreement;
-import java.util.Arrays;
 
 public class Client {
 	private static KeyStorage clientKeys;
